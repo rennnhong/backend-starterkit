@@ -121,7 +121,6 @@ public class DataInitializer {
                 fakerCN.crypto().md5(),
                 null,
                 new HashSet(),
-                null,
                 fakerCN.date().birthday().toString(),
                 null,
                 null,

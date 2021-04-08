@@ -16,10 +16,6 @@ import java.util.UUID;
 )
 public interface UserMapper extends BaseMapper<UserDto, User> {
 
-//    UserDto toDto(CreateUserRequestDto createUserRequestDto);
-//
-//    UserDto toDto(UpdateUserRequestDto createUserRequestDto);
-
     void populateDto(@MappingTarget UserDto roleDto, CreateUserRequestDto createRoleRequestDto);
 
     void populateDto(@MappingTarget UserDto roleDto, UpdateUserRequestDto updateRoleRequestDto);

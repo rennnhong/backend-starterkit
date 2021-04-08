@@ -39,13 +39,13 @@ Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "userName": "揚揚手下A",
-  "personnelId": "A123456789",
+  "userName": "李敏鎬",
   "account": "young",
   "password": "123456",
-  "employeeId": "A0004",
-  "departmentId": "131c207a-289e-4350-ba8e-4034af23bba9",
-  "roleId": "1193bccc-1bb5-4236-a81b-2b179f958b03"
+  "roleIds": [
+    "16fc1a3b-7c4b-4eac-a3df-84811f97692c",
+    "232b25a6-047f-4112-98d6-614bd75612a7"
+  ]
 }
 
 ### 更新使用者個人資料

@@ -26,7 +26,7 @@ spring:
       hibernate:
     #        use_nationalized_character_data: true # 設定 Database--這不知道是殺小，加的話會報「不支持從 varchar 到 NCHAR 的轉換」的錯誤
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   security:
     user:
       name: admin

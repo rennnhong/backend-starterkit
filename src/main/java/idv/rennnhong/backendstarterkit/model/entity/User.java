@@ -36,14 +36,13 @@ import java.util.UUID;
 public class User extends BaseEntity<String> {
 
     public User(String userName, String account, String password, Set<UserPermission> userPermissions,
-                Set<Role> roles, Department department, String birthday, String gender, String email,
+                Set<Role> roles, String birthday, String gender, String email,
                 String phone, String city) {
         this.userName = userName;
         this.account = account;
         this.password = password;
         this.userPermissions = userPermissions;
         this.roles = roles;
-        this.department = department;
         this.birthday = birthday;
         this.gender = gender;
         this.email = email;
@@ -71,25 +70,17 @@ public class User extends BaseEntity<String> {
     @ElementCollection
     @CollectionTable(
         name = "sysUserPermission"
-//        joinColumns = @JoinColumn(name = "user_id")
     )
     Set<UserPermission> userPermissions;
 
     @ManyToMany
-    @JoinTable(name = "sysUserRole"
-//        joinColumns = {@JoinColumn(name = "user_id")},
-//        inverseJoinColumns = {@JoinColumn(name = "role_id")}
-    )
+    @JoinTable(name = "sysUserRole")
     private Set<Role> roles;
 
 
     @ManyToOne
-//    @JoinColumn(
-//        name = "department_id"
-//    )
-    private Department department;
 
-//以下為商業邏輯==========================================
+    private Department department;
 
     @Column
     private String birthday;

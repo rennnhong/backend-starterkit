@@ -2,6 +2,8 @@ package idv.rennnhong.backendstarterkit.dto;
 
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class UserDto {
 
@@ -16,6 +18,8 @@ public class UserDto {
     private String email;
     private String phone;
     private String city;
+
+    private String[] roleIds;
 
 
 }
