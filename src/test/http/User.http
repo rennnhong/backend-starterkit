@@ -1,0 +1,79 @@
+### 使用者登入
+POST {{serverUrl}}/api/login
+Content-Type: application/json
+
+{
+  "account": "young",
+  "password": "662af1cd1976f09a9f8cecc868ccc0a2"
+}
+
+### query users
+GET {{serverUrl}}/api/users?page=0&defaultValue=10
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### query user by id
+GET {{serverUrl}}/api/users/fb67b87f-369f-4fba-8b1a-298c3b8d7430
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### query user by account
+GET {{serverUrl}}/api/users?account=Juan11166
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 查詢使用者個人資料
+POST {{serverUrl}}/api/users/search
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "userName": "竣揚小老弟",
+  "personnelId": "A123456789",
+  "employeeId": "A0004"
+}
+
+### 新增使用者個人資料
+POST {{serverUrl}}/api/users
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "userName": "揚揚手下A",
+  "personnelId": "A123456789",
+  "account": "young",
+  "password": "123456",
+  "employeeId": "A0004",
+  "departmentId": "131c207a-289e-4350-ba8e-4034af23bba9",
+  "roleId": "1193bccc-1bb5-4236-a81b-2b179f958b03"
+}
+
+### 更新使用者個人資料
+PUT {{serverUrl}}/api/users
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "id": "fb67b87f-369f-4fba-8b1a-298c3b8d7430",
+  "userName": "竣揚小老弟",
+  "personnelId": "A123456789",
+  "account": "young",
+  "password": "123456",
+  "employeeId": "A0004",
+  "departmentId": "131c207a-289e-4350-ba8e-4034af23bba9",
+  "roleId": "1193bccc-1bb5-4236-a81b-2b179f958b03"
+}
+
+### 刪除使用者個人資料
+DELETE {{serverUrl}}/api/users/620dcdc2-a628-4468-a786-59068453e172
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 判斷傳進來的路由是擁有存取權限
+POST {{serverUrl}}/api/users/auths/routes
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "url": "/code"
+}

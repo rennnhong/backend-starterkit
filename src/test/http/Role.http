@@ -1,0 +1,13 @@
+###新增 角色對應頁面(依actionID )
+POST {{serverUrl}}/api/roles/auths
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "roleId": "c6ee13ae-844a-46ad-b381-c07028111575",
+  "pageId": "c0e0c626-93e9-4cfb-8e1f-03c9dc264a62",
+  "actionId": [
+    "8",
+    "9"
+  ]
+}
