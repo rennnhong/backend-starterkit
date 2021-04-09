@@ -16,6 +16,7 @@ import java.util.Date;
 public abstract class Auditable<T> {
 
     @CreatedBy//創建者
+    @Column(updatable = false)
     protected T createUserId;
 
     @CreatedDate//創建日期

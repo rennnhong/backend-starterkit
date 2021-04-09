@@ -83,7 +83,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleDto, Role, UUID> implem
             .build();
 
         Page<Role> resultPage = roleDao.findAll(
-            PageRequest.of(qp.getPageOffset(), qp.getPageOffset()));
+            PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<RoleDto> roleDtos = ImmutableList.copyOf(roleMapper.toDto(resultPage.getContent()));
 
