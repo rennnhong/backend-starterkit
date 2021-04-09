@@ -1,13 +1,39 @@
-###新增 角色對應頁面(依actionID )
-POST {{serverUrl}}/api/roles/auths
+### 取得所有角色資料
+GET {{serverUrl}}/api/roles?pageNumber=1&rowsPerPage=10
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 取得角色資料ById
+GET {{serverUrl}}/api/roles/9624d7cb-d318-43f4-bc9f-f76556242ac0
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 新增角色資料
+POST {{serverUrl}}/api/roles
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "roleId": "c6ee13ae-844a-46ad-b381-c07028111575",
-  "pageId": "c0e0c626-93e9-4cfb-8e1f-03c9dc264a62",
-  "actionId": [
-    "8",
-    "9"
-  ]
+  "name": "新增測試",
+  "code": "createTest"
 }
+
+### 修改角色資料ById
+PUT {{serverUrl}}/api/roles/7253dc0d-cb14-4d9f-b725-3400e81397d6
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "name": "沒用的仲基",
+  "code": "loserG"
+}
+
+### 刪除角色資料ById
+DELETE {{serverUrl}}/api/roles/56e3434f-6f56-4c3e-8c6b-10348040919e
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 取得所有頁面權限角色資料
+GET {{serverUrl}}/api/roles/auths
+Content-Type: application/json
+Authorization: KangDa {{token}}

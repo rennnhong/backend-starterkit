@@ -114,6 +114,7 @@ public class RoleController {
         if (!roleService.isExist(UUID.fromString(id))) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
+        //todo 若無法刪除，應顯示還有哪些User在使用
         roleService.delete(UUID.fromString(id));
         return ResponseEntity.noContent().build();
     }
