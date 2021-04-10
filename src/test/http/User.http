@@ -1,79 +1,44 @@
-### 使用者登入
-POST {{serverUrl}}/api/login
-Content-Type: application/json
-
-{
-  "account": "young",
-  "password": "662af1cd1976f09a9f8cecc868ccc0a2"
-}
-
-### query users
-GET {{serverUrl}}/api/users?page=0&defaultValue=10
+### 使用者查詢
+GET {{serverUrl}}/api/users
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
-### query user by id
-GET {{serverUrl}}/api/users/fb67b87f-369f-4fba-8b1a-298c3b8d7430
-Content-Type: application/json
-Authorization: KangDa {{token}}
-
-### query user by account
-GET {{serverUrl}}/api/users?account=Juan11166
-Content-Type: application/json
-Authorization: KangDa {{token}}
-
-### 查詢使用者個人資料
-POST {{serverUrl}}/api/users/search
-Content-Type: application/json
-Authorization: KangDa {{token}}
-
-{
-  "userName": "竣揚小老弟",
-  "personnelId": "A123456789",
-  "employeeId": "A0004"
-}
-
-### 新增使用者個人資料
+### 使用者新增
 POST {{serverUrl}}/api/users
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "userName": "李敏鎬",
-  "account": "young",
-  "password": "123456",
-  "roleIds": [
-    "16fc1a3b-7c4b-4eac-a3df-84811f97692c",
-    "232b25a6-047f-4112-98d6-614bd75612a7"
-  ]
+  "userName":"昱銘小老弟",
+  "account": "YumiLoudDid"
 }
 
+### 單一使用者
+GET {{serverUrl}}/api/users/3c1c2934-cc33-47d5-a458-d46a3ff87274
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+### 查詢單一使用者 By Account
+GET {{serverUrl}}/api/users?account=Trula15637
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
 ### 更新使用者個人資料
-PUT {{serverUrl}}/api/users
+PUT {{serverUrl}}/api/users/07dd3b37-589b-4c7e-aac3-424345446f81
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "id": "fb67b87f-369f-4fba-8b1a-298c3b8d7430",
-  "userName": "竣揚小老弟",
-  "personnelId": "A123456789",
-  "account": "young",
-  "password": "123456",
-  "employeeId": "A0004",
-  "departmentId": "131c207a-289e-4350-ba8e-4034af23bba9",
-  "roleId": "1193bccc-1bb5-4236-a81b-2b179f958b03"
+  "account": "YumiLoudDid",
+  "userName": "昱銘big弟",
+  "birthday": "1999/5/26",
+  "city": "Kaohsiung",
+  "email": "yumi@kdinfo.com",
+  "gender": "男",
+  "phone": "3345678"
 }
 
 ### 刪除使用者個人資料
-DELETE {{serverUrl}}/api/users/620dcdc2-a628-4468-a786-59068453e172
+DELETE {{serverUrl}}/api/users/1774ffed-cab2-41a4-9eac-a74ae7bfa09f
 Content-Type: application/json
 Authorization: KangDa {{token}}
-
-### 判斷傳進來的路由是擁有存取權限
-POST {{serverUrl}}/api/users/auths/routes
-Content-Type: application/json
-Authorization: KangDa {{token}}
-
-{
-  "url": "/code"
-}
