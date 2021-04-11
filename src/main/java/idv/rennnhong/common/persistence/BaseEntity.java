@@ -1,11 +1,20 @@
 package idv.rennnhong.common.persistence;
 
-import idv.rennnhong.common.persistence.audit.Auditable;
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Type;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-@Data
-public abstract class BaseEntity<T> extends Auditable<T> {
+@Getter
+@Setter
+public abstract class BaseEntity<ID>{
+
+    @Id
+    @GeneratedValue
+    @Type(type="uuid-char")
+    protected ID id;
+
 }

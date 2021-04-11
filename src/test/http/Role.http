@@ -14,22 +14,22 @@ Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "name": "新增測試",
-  "code": "createTest"
+  "name": "測試者",
+  "code": "test01"
 }
 
 ### 修改角色資料ById
-PUT {{serverUrl}}/api/roles/7253dc0d-cb14-4d9f-b725-3400e81397d6
+PUT {{serverUrl}}/api/roles/c95cf9ca-76b5-490c-b57f-3872a1900aa1
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
 {
-  "name": "沒用的仲基",
-  "code": "loserG"
+  "name": "測試者",
+  "code": "test02"
 }
 
 ### 刪除角色資料ById
-DELETE {{serverUrl}}/api/roles/56e3434f-6f56-4c3e-8c6b-10348040919e
+DELETE {{serverUrl}}/api/roles/c3530613-335e-4e37-a455-91029e088fb4
 Content-Type: application/json
 Authorization: KangDa {{token}}
 

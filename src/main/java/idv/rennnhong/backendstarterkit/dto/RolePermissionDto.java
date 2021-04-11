@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class RolePermissionDto {
+public class RolePermissionDto  {
 
     private String roleId;
     private String permissionId;

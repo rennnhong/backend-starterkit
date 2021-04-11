@@ -1,24 +1,27 @@
 package idv.rennnhong.backendstarterkit.dto.mapper;
 
 
-import idv.rennnhong.common.BaseMapper;
 import idv.rennnhong.backendstarterkit.controller.request.action.CreateActionRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.model.entity.Action;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+
+import java.util.Collection;
 import java.util.UUID;
 
 @Mapper(
-    componentModel = "spring",
-    imports = UUID.class
+        componentModel = "spring",
+        imports = UUID.class
 )
-public interface ActionMapper extends BaseMapper<ActionDto, Action> {
+public interface ActionMapper {
 
+    Action createEntity(CreateActionRequestDto dto);
 
-    void populateDto(@MappingTarget ActionDto roleDto, CreateActionRequestDto createActionRequestDto);
+    void updateEntity(@MappingTarget Action entity, UpdateActionRequestDto updateActionRequestDto);
 
-    void populateDto(@MappingTarget ActionDto roleDto, UpdateActionRequestDto updateActionRequestDto);
+    ActionDto toDto(Action entity);
 
+    Collection<ActionDto> toDto(Collection<Action> entities);
 }

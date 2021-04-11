@@ -1,6 +1,7 @@
 package idv.rennnhong.backendstarterkit.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Permission extends BaseEntity<String> {
+public class Permission extends AuditableEntity<String,UUID> {
 
     public Permission(String name, String icon, String route, Integer sorted, Integer opened, Set<Action> actions,
                       Permission parent, Set<Permission> children) {

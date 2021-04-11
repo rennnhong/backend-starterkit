@@ -1,8 +1,10 @@
 package idv.rennnhong.backendstarterkit.controller.request.user;
 
-import javax.validation.constraints.NotEmpty;
+import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import lombok.Data;
-import java.util.UUID;
+
+import java.util.Date;
+import java.util.List;
 
 @Data
 public class UpdateUserRequestDto {
@@ -11,10 +13,9 @@ public class UpdateUserRequestDto {
 
     private String account;
 
+    private String password;
 
-//以下為商業邏輯==========================================
-
-    private String birthday;
+    private Date birthday;
 
     private String gender;
 
@@ -23,4 +24,7 @@ public class UpdateUserRequestDto {
     private String phone;
 
     private String city;
+
+    private List<String> roleIds;
+
 }

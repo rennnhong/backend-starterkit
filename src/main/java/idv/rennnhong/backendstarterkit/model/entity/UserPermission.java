@@ -16,15 +16,9 @@ import javax.persistence.ManyToOne;
 public class UserPermission {
 
     @ManyToOne
-//    @JoinColumn(
-//        name = "permission_id"
-//    )
     Permission permission;
 
     @ManyToOne
-//    @JoinColumn(
-//        name = "action_id"
-//    )
     Action action;
 
 }

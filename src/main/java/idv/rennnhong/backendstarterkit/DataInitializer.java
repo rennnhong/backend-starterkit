@@ -20,13 +20,9 @@ import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -55,9 +51,9 @@ public class DataInitializer {
     public void init() {
 
         List<Role> initRoles = Lists.newArrayList(
-            new Role("系統管理員", "admin", null, new HashSet<>()),
-            new Role("作業管理員", "manager", null, new HashSet<>()),
-            new Role("一般使用者", "user", null, new HashSet<>())
+                new Role("系統管理員", "admin", null, new HashSet<>()),
+                new Role("作業管理員", "manager", null, new HashSet<>()),
+                new Role("一般使用者", "user", null, new HashSet<>())
         );
 
         Permission 根目錄 = new Permission("根目錄", null, null, 1, 1, null, null, null);
@@ -69,20 +65,20 @@ public class DataInitializer {
         Permission 目錄3_1 = new Permission("目錄3_1", null, null, 1, 1, null, 目錄3, null);
 
         List<Permission> initPermissions = Lists.newArrayList(
-            根目錄,
-            目錄1,
-            目錄2,
-            目錄3,
-            目錄1_1,
-            目錄2_1,
-            目錄3_1
+                根目錄,
+                目錄1,
+                目錄2,
+                目錄3,
+                目錄1_1,
+                目錄2_1,
+                目錄3_1
         );
 
         String[] actionStr = new String[]{"新增", "修改", "刪除", "查詢"};
 
         for (Permission initPermission : initPermissions) {
             Set<Action> collect = Arrays.stream(actionStr).map(str -> new Action(str, null, null, null, null, null))
-                .collect(Collectors.toSet());
+                    .collect(Collectors.toSet());
             initPermission.setActions(collect);
         }
 
@@ -92,20 +88,20 @@ public class DataInitializer {
             for (Permission initPermission : initPermissions) {
                 for (Action action : initPermission.getActions()) {
                     if ("系統管理員".equals(initRole.getName())
-                        && permissionService.isLastLayer(initPermission.getId().toString())
-                        && ("新增".equals(action.getName()) || "修改".equals(action.getName()) || "刪除"
-                        .equals(action.getName()) || "查詢".equals(action.getName()))) {
+                            && permissionService.isLastLayer(UUID.fromString(initPermission.getId().toString()))
+                            && ("新增".equals(action.getName()) || "修改".equals(action.getName()) || "刪除"
+                            .equals(action.getName()) || "查詢".equals(action.getName()))) {
                         initRole.getRolePermissions().add(new RolePermission(initPermission, action));
                     }
                     if ("作業管理員".equals(initRole.getName())
-                        && permissionService.isLastLayer(initPermission.getId().toString())
-                        && ("新增".equals(action.getName()) || "修改".equals(action.getName()) || "查詢"
-                        .equals(action.getName()))) {
+                            && permissionService.isLastLayer(UUID.fromString(initPermission.getId().toString()))
+                            && ("新增".equals(action.getName()) || "修改".equals(action.getName()) || "查詢"
+                            .equals(action.getName()))) {
                         initRole.getRolePermissions().add(new RolePermission(initPermission, action));
                     }
                     if ("一般使用者".equals(initRole.getName())
-                        && permissionService.isLastLayer(initPermission.getId().toString())
-                        && "查詢".equals(action.getName())) {
+                            && permissionService.isLastLayer(UUID.fromString(initPermission.getId().toString()))
+                            && "查詢".equals(action.getName())) {
                         initRole.getRolePermissions().add(new RolePermission(initPermission, action));
                     }
 
@@ -116,16 +112,16 @@ public class DataInitializer {
         List<User> initUsers = Lists.newArrayList();
         for (int i = 0; i < 10; i++) {
             User user = new User(
-                fakerCN.name().fullName(),
-                fakerEN.name().firstName() + fakerEN.number().digits(5),
-                fakerCN.crypto().md5(),
-                null,
-                new HashSet(),
-                fakerCN.date().birthday().toString(),
-                null,
-                null,
-                fakerCN.phoneNumber().phoneNumber(),
-                fakerCN.country().capital());
+                    fakerCN.name().fullName(),
+                    fakerEN.name().firstName() + fakerEN.number().digits(5),
+                    fakerCN.crypto().md5(),
+                    null,
+                    new HashSet(),
+                    fakerCN.date().birthday(),
+                    "男",
+                    fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com",
+                    fakerCN.phoneNumber().phoneNumber(),
+                    fakerCN.country().capital());
             int random = (int) (Math.random() * 3);
             user.getRoles().add(initRoles.get(random));
             initUsers.add(user);
