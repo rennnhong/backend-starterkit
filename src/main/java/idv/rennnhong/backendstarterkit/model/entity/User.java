@@ -7,14 +7,16 @@ import javax.persistence.*;
 
 import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
-
+import org.hibernate.annotations.Where;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -28,7 +30,11 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
+
+@SQLDelete(sql="update sys_user set deleted = 1 where id = ?")
+@Where(clause = "deleted = 0")
 public class User extends AuditableEntity<String, UUID> {
+
 
     public User(String userName, String account, String password, Set<UserPermission> userPermissions,
                 Set<Role> roles, Date birthday, String gender, String email,
@@ -54,6 +60,10 @@ public class User extends AuditableEntity<String, UUID> {
     @Column
     @JsonIgnore
     private String password;
+
+    @Column
+    @ApiModelProperty(value = "邏輯删除（0 未删除、1 删除）")
+    private Integer deleted = 0;
 
     @ElementCollection
     @CollectionTable(name = "sysUserPermission")

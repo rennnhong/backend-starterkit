@@ -12,13 +12,17 @@ import javax.persistence.Table;
 
 import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
+
 
 import java.util.Set;
 import java.util.UUID;
@@ -32,7 +36,11 @@ import java.util.UUID;
 @EqualsAndHashCode(exclude = "users")
 @AllArgsConstructor
 @NoArgsConstructor
+
+@SQLDelete(sql="update sys_role set deleted = 1 where id = ?")
+@Where(clause = "deleted = 0")
 public class Role extends AuditableEntity<String, UUID> {
+
 
     public Role(String name, String code, Set<User> users, Set<RolePermission> rolePermissions) {
         this.name = name;
@@ -51,6 +59,10 @@ public class Role extends AuditableEntity<String, UUID> {
 
     @Column(nullable = false)
     String code;
+
+    @Column
+    @ApiModelProperty(value = "邏輯删除（0 未删除、1 删除）")
+    private Integer deleted = 0;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     Set<User> users;
