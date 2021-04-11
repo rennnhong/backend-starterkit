@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
+
 
 import java.util.Set;
 import java.util.UUID;
@@ -33,9 +36,11 @@ import java.util.UUID;
 @EqualsAndHashCode(exclude = "users")
 @AllArgsConstructor
 @NoArgsConstructor
+
 @SQLDelete(sql="update sys_role set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
-public class Role extends BaseEntity<String> {
+public class Role extends AuditableEntity<String, UUID> {
+
 
     public Role(String name, String code, Set<User> users, Set<RolePermission> rolePermissions) {
         this.name = name;
@@ -46,7 +51,7 @@ public class Role extends BaseEntity<String> {
 
     @Id
     @GeneratedValue
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(nullable = false)
@@ -70,7 +75,7 @@ public class Role extends BaseEntity<String> {
 
     @ElementCollection
     @CollectionTable(
-        name = "sysRolePermission"
+            name = "sysRolePermission"
 //        joinColumns = @JoinColumn(name = "role_id")
     )
     Set<RolePermission> rolePermissions;

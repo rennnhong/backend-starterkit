@@ -61,26 +61,30 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-
     @GetMapping
     @ApiOperation("取得使用者資料")
     public ResponseEntity getUsers(@RequestParam(defaultValue = "1") int pageNumber,
                                    @RequestParam(defaultValue = "10") int rowsPerPage) {
         PageableResult<UserDto> result = userService.pageAll(pageNumber, rowsPerPage);
-
         ResponseBody<Collection<UserDto>> responseBody = ResponseBody.newPageableBody(result);
-
         return new ResponseEntity(responseBody, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @ApiOperation("查詢使用者資料 By userId")
+    public ResponseEntity<Object> getUserByUserId(@PathVariable UUID id) {
+        if ("".equals(id)) {
+            return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(userService.getById(id), HttpStatus.OK);
+    }
 
     @PostMapping
     @ApiOperation("建立使用者資料")
     public ResponseEntity<Object> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
-        UserDto userDto = new UserDto();
-        userMapper.populateDto(userDto, createUserRequestDto);
-        if (!userService.isExistByAccount(userDto.getAccount())) {
-            UserDto savedUserDto = userService.save(userDto);
+        if (!userService.isExistByAccount(createUserRequestDto.getAccount())) {
+            UserDto savedUserDto = userService.save(createUserRequestDto);
             return new ResponseEntity(ResponseBody.newSingleBody(savedUserDto), HttpStatus.OK);
         }
         return new ResponseEntity(
@@ -88,19 +92,6 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);
     }
 
-
-
-
-    @GetMapping("/{id}")
-    @ApiOperation("查詢使用者資料 By userId")
-    public ResponseEntity<Object> getUserByUserId(@PathVariable String id) {
-        if ("".equals(id)) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity(userService.getById(UUID.fromString(id)), HttpStatus.OK);
-    }
 
     @GetMapping(params = {"account"})
     @ApiOperation("查詢使用者資料 By Account")
@@ -117,7 +108,7 @@ public class UserController {
     @PutMapping("/{id}")
     @ApiOperation("更新使用者資料")
     public ResponseEntity<Object> updateUser(
-            @PathVariable("id") String id,
+            @PathVariable("id") UUID id,
             @Valid @RequestBody UpdateUserRequestDto updateUserRequestDto,
             BindingResult bindingResult) {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
@@ -126,13 +117,11 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        UserDto userDto = userService.getById(UUID.fromString(id));
+        UserDto userDto = userService.getById(id);
         if (userDto == null) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
-
-        userMapper.populateDto(userDto, updateUserRequestDto);
-        UserDto updatedUserDto = userService.update(userDto);
+        UserDto updatedUserDto = userService.update(id, updateUserRequestDto);
         return new ResponseEntity(updatedUserDto, HttpStatus.OK);
     }
 

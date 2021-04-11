@@ -3,16 +3,9 @@ package idv.rennnhong.backendstarterkit.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -24,7 +17,7 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
-
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,12 +30,14 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
+
 @SQLDelete(sql="update sys_user set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
-public class User extends BaseEntity<String> {
+public class User extends AuditableEntity<String, UUID> {
+
 
     public User(String userName, String account, String password, Set<UserPermission> userPermissions,
-                Set<Role> roles, String birthday, String gender, String email,
+                Set<Role> roles, Date birthday, String gender, String email,
                 String phone, String city) {
         this.userName = userName;
         this.account = account;
@@ -56,14 +51,8 @@ public class User extends BaseEntity<String> {
         this.city = city;
     }
 
-    @Id
-    @GeneratedValue
-    @Type(type="uuid-char")
-    private UUID id;
-
     @Column
     private String userName;
-
 
     @Column(updatable = true)
     private String account;
@@ -76,11 +65,8 @@ public class User extends BaseEntity<String> {
     @ApiModelProperty(value = "邏輯删除（0 未删除、1 删除）")
     private Integer deleted = 0;
 
-
     @ElementCollection
-    @CollectionTable(
-        name = "sysUserPermission"
-    )
+    @CollectionTable(name = "sysUserPermission")
     Set<UserPermission> userPermissions;
 
     @ManyToMany
@@ -89,11 +75,11 @@ public class User extends BaseEntity<String> {
 
 
     @ManyToOne
-
     private Department department;
 
     @Column
-    private String birthday;
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
 
     @Column
     private String gender;

@@ -6,5 +6,4 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface BaseDao<T,ID> extends JpaRepository<T, ID>{
 
-//    T findById(String id);
 }

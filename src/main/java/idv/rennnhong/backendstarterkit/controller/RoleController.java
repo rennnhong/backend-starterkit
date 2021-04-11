@@ -3,6 +3,7 @@ package idv.rennnhong.backendstarterkit.controller;
 import static idv.rennnhong.common.response.ErrorMessages.RESOURCE_NOT_FOUND;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.response.ResponseBody;
 import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
@@ -17,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -42,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/roles")
 @Api(tags = {"角色資料"})
 @SwaggerDefinition(tags = {
-    @Tag(name = "角色資料", description = "角色資料API文件")
+        @Tag(name = "角色資料", description = "角色資料API文件")
 })
 public class RoleController {
 
@@ -71,11 +73,18 @@ public class RoleController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @GetMapping("/{roleId}/users")
+    @ApiOperation("取得指定角色的所有使用者資料")
+    public ResponseEntity getUsersOfRole(@PathVariable UUID roleId) {
+        Collection<UserDto> usersOfRole = userService.getUsersOfRole(roleId);
+        ResponseBody<Collection<UserDto>> responseBody = ResponseBody.newCollectionBody(usersOfRole);
+        return new ResponseEntity(responseBody, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     @ApiOperation("取得角色資料ById")
-    public ResponseEntity getRoleById(@PathVariable String id) {
-        RoleDto role = roleService.getById(UUID.fromString(id));
+    public ResponseEntity getRoleById(@PathVariable UUID id) {
+        RoleDto role = roleService.getById(id);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(role);
         return ResponseEntity.ok(responseBody);
     }
@@ -84,9 +93,7 @@ public class RoleController {
     @PostMapping
     @ApiOperation("新增角色資料")
     public ResponseEntity createRole(@RequestBody CreateRoleRequestDto createRoleRequestDto) {
-        RoleDto roleDto = new RoleDto();
-        roleMapper.populateDto(roleDto, createRoleRequestDto);
-        RoleDto savedRole = roleService.save(roleDto);
+        RoleDto savedRole = roleService.save(createRoleRequestDto);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(savedRole);
         return new ResponseEntity(responseBody, HttpStatus.CREATED);
     }
@@ -94,15 +101,14 @@ public class RoleController {
 
     @PutMapping("/{id}")
     @ApiOperation("修改角色資料")
-    public ResponseEntity updateRole(@PathVariable("id") String id,
+    public ResponseEntity updateRole(@PathVariable("id") UUID id,
                                      @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
-        RoleDto roleDto = roleService.getById(UUID.fromString(id));
+        RoleDto roleDto = roleService.getById(id);
 
         if (ObjectUtils.isEmpty(roleDto)) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
-        roleMapper.populateDto(roleDto, updateRoleRequestDto);
-        RoleDto updatedRole = roleService.update(roleDto);
+        RoleDto updatedRole = roleService.update(id, updateRoleRequestDto);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(updatedRole);
         return ResponseEntity.ok(responseBody);
     }
@@ -110,12 +116,12 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @ApiOperation("刪除角色資料")
-    public ResponseEntity deleteRole(@PathVariable String id) {
-        if (!roleService.isExist(UUID.fromString(id))) {
+    public ResponseEntity deleteRole(@PathVariable UUID id) {
+        if (!roleService.isExist(id)) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
         //todo 若無法刪除，應顯示還有哪些User在使用
-        roleService.delete(UUID.fromString(id));
+        roleService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -128,10 +134,10 @@ public class RoleController {
         if (!userService.isExist(UUID.fromString(userId))) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
-        Set<RoleDto> roles = roleService.getRolesByUserId(userId);
+        Set<RoleDto> roles = roleService.getRolesByUserId(UUID.fromString(userId));
         Collection<PermissionDto> permissions = permissionService.getPermissionsByRoles(roles);
         ResponseBody<Collection<PermissionDto>> responseBody = ResponseBody.newCollectionBody(permissions);
         return new ResponseEntity<Object>(responseBody, HttpStatus.OK);
     }
-    
+
 }

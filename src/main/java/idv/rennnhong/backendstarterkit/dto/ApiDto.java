@@ -3,10 +3,8 @@ package idv.rennnhong.backendstarterkit.dto;
 import lombok.Data;
 
 @Data
-public class ApiDto {
+public class ApiDto{
 
-
-    private String id;
 
     private String url;
 

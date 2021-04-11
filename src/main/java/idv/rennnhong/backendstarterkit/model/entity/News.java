@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +19,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class News extends BaseEntity<String> {
+public class News extends AuditableEntity<String,UUID> {
 
-    @Id
-    @GeneratedValue
-    @Type(type="uuid-char")
-    private UUID id;
+//    @Id
+//    @GeneratedValue
+//    @Type(type="uuid-char")
+//    private UUID id;
 
     @Column(nullable = false)
     String title;

@@ -2,10 +2,12 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import idv.rennnhong.common.BaseServiceImpl;
-import idv.rennnhong.common.query.PageableResult;
-import idv.rennnhong.common.query.PageableResultImpl;
-import idv.rennnhong.common.query.QueryParameter;
+import com.google.common.collect.Lists;
+import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
+import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
 import idv.rennnhong.backendstarterkit.model.dao.ActionDao;
 import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
 import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
@@ -15,60 +17,105 @@ import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
 import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.service.RoleService;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import idv.rennnhong.common.query.PageableResult;
+import idv.rennnhong.common.query.PageableResultImpl;
+import idv.rennnhong.common.query.QueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 @Service
-public class RoleServiceImpl extends BaseServiceImpl<RoleDto, Role, UUID> implements RoleService {
+public class RoleServiceImpl implements RoleService {
 
     final RoleDao roleDao;
 
-    final PermissionDao permissionDao;
-
-    final ActionDao actionDao;
-
-    final UserDao userDao;
-
     final RoleMapper roleMapper;
 
+    PermissionDao permissionDao;
+
+    ActionDao actionDao;
+
+    UserDao userDao;
 
     @Autowired
-    public RoleServiceImpl(RoleDao roleDao, PermissionDao permissionDao, ActionDao actionDao,
-                           RoleMapper roleMapper, UserDao userDao) {
-        super(roleDao, roleMapper);
-        this.roleDao = (RoleDao) super.baseDao;
+    public void setPermissionDao(PermissionDao permissionDao) {
         this.permissionDao = permissionDao;
+    }
+
+    @Autowired
+    public void setActionDao(ActionDao actionDao) {
         this.actionDao = actionDao;
+    }
+
+    @Autowired
+    public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Autowired
+    public RoleServiceImpl(RoleDao roleDao, RoleMapper roleMapper) {
+//        super(roleDao, roleMapper);
+        this.roleDao = roleDao;
         this.roleMapper = roleMapper;
     }
 
-//    @Override
-//    public KdQueryResult<RoleDTO> getBySearch(SearchRoleDto searchRoleDto) {
-//        return null;
-//    }
 
     @Override
-    public RoleDto updateRolePage(String roleId, String pageId, String[] actionIds) {
-        Role role = roleDao.findById(UUID.fromString(roleId)).get();
-        Permission permission = permissionDao.findById(UUID.fromString(pageId)).get();
+    public Collection<RoleDto> getAll() {
+        List<Role> roles = roleDao.findAll();
+        return Lists.newArrayList(roleMapper.toDto(roles));
+    }
+
+    @Override
+    public RoleDto getById(UUID id) {
+        Role role = roleDao.findById(id).get();
+        return roleMapper.toDto(role);
+    }
+
+    @Override
+    public RoleDto save(CreateRoleRequestDto createRoleRequestDto) {
+        Role role = roleMapper.createEntity(createRoleRequestDto);
+        Role savedRole = roleDao.save(role);
+        return roleMapper.toDto(savedRole);
+    }
+
+    @Override
+    public RoleDto update(UUID id, UpdateRoleRequestDto updateRoleRequestDto) {
+        Role role = roleDao.findById(id).get();
+        roleMapper.updateEntity(role, updateRoleRequestDto);
+
+        Role updatedRole = roleDao.save(role);
+        return roleMapper.toDto(updatedRole);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        roleDao.deleteById(id);
+    }
+
+    @Override
+    public boolean isExist(UUID id) {
+        return roleDao.existsById(id);
+    }
+
+    @Override
+    public RoleDto updateRolePage(UUID roleId, UUID pageId, List<UUID> actionIds) {
+        Role role = roleDao.findById(roleId).get();
+        Permission permission = permissionDao.findById(pageId).get();
         Set<RolePermission> rolePermissions = role.getRolePermissions();
         rolePermissions.clear();
 
-        Arrays.stream(actionIds)
-            .forEach(actionId -> {
-                rolePermissions
-                    .add(new RolePermission(permission, actionDao.findById(UUID.fromString(actionId)).get()));
-            });
+        actionIds.stream()
+                .forEach(actionId -> {
+                    rolePermissions
+                            .add(new RolePermission(permission, actionDao.findById(actionId).get()));
+                });
         Role updatedRole = roleDao.save(role);
 
         return roleMapper.toDto(updatedRole);
@@ -78,26 +125,26 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleDto, Role, UUID> implem
     @Override
     public PageableResult<RoleDto> pageAll(Integer pageNumber, Integer rowsPerPage) {
         QueryParameter qp = new QueryParameter()
-            .addPageNumber(pageNumber)
-            .addRowsPerPage(rowsPerPage)
-            .build();
+                .addPageNumber(pageNumber)
+                .addRowsPerPage(rowsPerPage)
+                .build();
 
         Page<Role> resultPage = roleDao.findAll(
-            PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
+                PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<RoleDto> roleDtos = ImmutableList.copyOf(roleMapper.toDto(resultPage.getContent()));
 
         return new PageableResultImpl(
-            qp.getPageLimit(),
-            qp.getPageNumber(),
-            resultPage.getTotalPages(),
-            resultPage.getTotalElements(),
-            roleDtos);
+                qp.getPageLimit(),
+                qp.getPageNumber(),
+                resultPage.getTotalPages(),
+                resultPage.getTotalElements(),
+                roleDtos);
     }
 
     @Override
-    public Set<RoleDto> getRolesByUserId(String userId) {
-        User user = userDao.findById(UUID.fromString(userId)).get();
+    public Set<RoleDto> getRolesByUserId(UUID userId) {
+        User user = userDao.findById(userId).get();
         Set<Role> roles = user.getRoles();
         return ImmutableSet.copyOf(roleMapper.toDto(roles));
     }

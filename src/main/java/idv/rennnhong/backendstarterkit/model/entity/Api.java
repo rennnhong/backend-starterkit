@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +22,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Api extends BaseEntity<String> {
+public class Api extends AuditableEntity<String,UUID> {
 
 
-    @Id
-    @GeneratedValue
-    @Type(type="uuid-char")
-    private UUID id;
+//    @Id
+//    @GeneratedValue
+//    @Type(type="uuid-char")
+//    private UUID id;
 
     @Column(nullable = false)
     String url;

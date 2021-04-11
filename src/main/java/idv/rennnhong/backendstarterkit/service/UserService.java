@@ -1,25 +1,33 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.common.BaseService;
-import idv.rennnhong.common.query.PageableResult;
+import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
+import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
+import idv.rennnhong.common.query.PageableResult;
 
+import java.util.Collection;
 import java.util.UUID;
 
-public interface UserService extends BaseService<UserDto, UUID> {
-
-//    UserDto saveUser(UserDto userDto);
+public interface UserService {
 
     PageableResult<UserDto> pageAll(Integer pageNumber, Integer rowsPerPage);
 
     UserDto getUserByAccount(String account);
 
-
-    boolean isLoginStatus(String account, String password);
-
-    boolean changeUserPassword(String userId, String password);
-
     boolean isExistByAccount(String userAccount);
 
+    Collection<UserDto> getUsersOfRole(UUID roleId);
+
+    Collection<UserDto> getAll();
+
+    UserDto getById(UUID id);
+
+    UserDto save(CreateUserRequestDto t);
+
+    UserDto update(UUID id, UpdateUserRequestDto t);
+
+    void delete(UUID id);
+
+    boolean isExist(UUID id);
 
 }

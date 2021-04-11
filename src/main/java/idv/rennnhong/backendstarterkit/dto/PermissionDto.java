@@ -3,10 +3,7 @@ package idv.rennnhong.backendstarterkit.dto;
 import lombok.Data;
 
 @Data
-public class PermissionDto {
-
-    private String id;
-
+public class PermissionDto{
 
     private String name;
 

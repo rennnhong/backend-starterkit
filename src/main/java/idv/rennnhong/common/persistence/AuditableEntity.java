@@ -1,5 +1,7 @@
-package idv.rennnhong.common.persistence.audit;
+package idv.rennnhong.common.persistence;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -11,20 +13,22 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<T> {
+public abstract class AuditableEntity<T, ID> extends BaseEntity<ID> {
 
     @CreatedBy//創建者
     @Column(updatable = false)
-    protected T createUserId;
+    protected String createUserId;
 
     @CreatedDate//創建日期
     @Column(updatable = false, nullable = false)
     protected Date createTime;
 
     @LastModifiedBy//修改者
-    protected T updateUserId;
+    protected String updateUserId;
 
     @LastModifiedDate//修改日期
     @Column(nullable = false)
