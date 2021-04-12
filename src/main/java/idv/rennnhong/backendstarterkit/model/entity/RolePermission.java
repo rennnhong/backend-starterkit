@@ -26,14 +26,14 @@ public class RolePermission {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RolePermission rolePermission = (RolePermission) o;
-        return permission.equals(rolePermission.permission) &&
-                action.equals(rolePermission.action);
+        RolePermission that = (RolePermission) o;
+        return Objects.equals(permission, that.permission) &&
+                Objects.equals(action, that.action);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(permission.getId(), action.getId());
+        return Objects.hash(permission, action);
     }
 
     public RolePermission(Permission permission, Action action) {

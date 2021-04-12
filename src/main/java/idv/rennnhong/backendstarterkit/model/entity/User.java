@@ -23,14 +23,11 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @Entity
-@EqualsAndHashCode
 @Table(name = "SysUser")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
-
 @SQLDelete(sql="update sys_user set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 public class User extends AuditableEntity<String, UUID> {
@@ -73,10 +70,6 @@ public class User extends AuditableEntity<String, UUID> {
     @JoinTable(name = "sysUserRole")
     private Set<Role> roles;
 
-
-    @ManyToOne
-    private Department department;
-
     @Column
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -93,6 +86,20 @@ public class User extends AuditableEntity<String, UUID> {
     @Column
     private String city;
 
-
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("User{");
+        sb.append("userName='").append(userName).append('\'');
+        sb.append(", account='").append(account).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", deleted=").append(deleted);
+        sb.append(", birthday=").append(birthday);
+        sb.append(", gender='").append(gender).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", phone='").append(phone).append('\'');
+        sb.append(", city='").append(city).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
 

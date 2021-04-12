@@ -2,8 +2,12 @@ package idv.rennnhong.backendstarterkit.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
-public class ActionDto{
+public class ActionDto {
+
+    private UUID id;
 
     private String name;
 

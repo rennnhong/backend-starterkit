@@ -110,7 +110,7 @@ public class PermissionServiceImpl implements PermissionService {
                 .build();
 
         Page<Permission> resultPage = permissionDao.findAll(
-                PageRequest.of(qp.getPageOffset(), qp.getPageOffset()));
+                PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<PermissionDto> dtos = ImmutableList
                 .copyOf(permissionMapper.toDto(resultPage.getContent()));

@@ -29,15 +29,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "SysRole")
-//@Data
 @Getter
 @Setter
-@ToString(exclude = "users")
-@EqualsAndHashCode(exclude = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-
-@SQLDelete(sql="update sys_role set deleted = 1 where id = ?")
+@SQLDelete(sql = "update sys_role set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 public class Role extends AuditableEntity<String, UUID> {
 
@@ -48,11 +44,6 @@ public class Role extends AuditableEntity<String, UUID> {
         this.users = users;
         this.rolePermissions = rolePermissions;
     }
-
-    @Id
-    @GeneratedValue
-    @Type(type = "uuid-char")
-    private UUID id;
 
     @Column(nullable = false)
     String name;
@@ -68,9 +59,16 @@ public class Role extends AuditableEntity<String, UUID> {
     Set<User> users;
 
     @ElementCollection
-    @CollectionTable(
-            name = "sysRolePermission"
-//        joinColumns = @JoinColumn(name = "role_id")
-    )
+    @CollectionTable(name = "sysRolePermission")
     Set<RolePermission> rolePermissions;
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Role{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", code='").append(code).append('\'');
+        sb.append(", deleted=").append(deleted);
+        sb.append('}');
+        return sb.toString();
+    }
 }

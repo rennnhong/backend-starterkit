@@ -18,14 +18,13 @@ import io.swagger.annotations.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/pages")
+@RequestMapping("/api/permissions")
 @Api(tags = {"頁面資料"})
 @SwaggerDefinition(tags = {
         @Tag(name = "頁面資料", description = "頁面管理API文件")

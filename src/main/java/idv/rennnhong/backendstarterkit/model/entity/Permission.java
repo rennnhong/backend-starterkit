@@ -65,6 +65,16 @@ public class Permission extends AuditableEntity<String, UUID> {
     @OneToMany(mappedBy = "parent")
     Set<Permission> children;
 
-
-
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Permission{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", icon='").append(icon).append('\'');
+        sb.append(", route='").append(route).append('\'');
+        sb.append(", sorted=").append(sorted);
+        sb.append(", opened=").append(opened);
+        sb.append(", parent=").append(parent.getId());
+        sb.append('}');
+        return sb.toString();
+    }
 }

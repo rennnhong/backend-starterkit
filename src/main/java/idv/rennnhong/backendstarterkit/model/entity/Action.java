@@ -56,16 +56,16 @@ public class Action extends AuditableEntity<String,UUID> {
     Permission permission;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Action action = (Action) o;
-        return name.equals(action.name) &&
-                permission.equals(action.permission);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, permission);
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Action{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", icon='").append(icon).append('\'');
+        sb.append(", sorted=").append(sorted);
+        sb.append(", disabled=").append(disabled);
+        sb.append(", functionName='").append(functionName).append('\'');
+        sb.append(", api=").append(api);
+        sb.append(", permission=").append(permission.getId());
+        sb.append('}');
+        return sb.toString();
     }
 }
