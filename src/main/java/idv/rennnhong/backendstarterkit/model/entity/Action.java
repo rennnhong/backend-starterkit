@@ -10,15 +10,16 @@ import javax.persistence.Table;
 
 import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
+
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "SysAction")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -32,11 +33,6 @@ public class Action extends AuditableEntity<String,UUID> {
         this.functionName = functionName;
         this.api = api;
     }
-
-//    @Id
-//    @GeneratedValue
-//    @Type(type="uuid-char")
-//    private UUID id;
 
     @Column(nullable = false)
     String name;
@@ -58,4 +54,18 @@ public class Action extends AuditableEntity<String,UUID> {
 
     @ManyToOne
     Permission permission;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Action action = (Action) o;
+        return name.equals(action.name) &&
+                permission.equals(action.permission);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, permission);
+    }
 }

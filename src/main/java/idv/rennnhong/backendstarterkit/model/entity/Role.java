@@ -67,12 +67,6 @@ public class Role extends AuditableEntity<String, UUID> {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     Set<User> users;
 
-//    @ManyToMany
-//    @JoinTable(name = "sys_role_page",
-//            joinColumns = {@JoinColumn(name = "role_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "permission_id")})
-//    Set<Page> pages;
-
     @ElementCollection
     @CollectionTable(
             name = "sysRolePermission"

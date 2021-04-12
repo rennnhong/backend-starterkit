@@ -1,41 +1,31 @@
 package idv.rennnhong.backendstarterkit.controller;
 
-import static idv.rennnhong.common.response.ErrorMessages.*;
-
-import idv.rennnhong.common.query.PageableResult;
-import idv.rennnhong.common.response.ResponseBody;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.backendstarterkit.web.utils.JwtTokenUtils;
 import idv.rennnhong.backendstarterkit.web.utils.MapValidationErrorService;
+import idv.rennnhong.common.query.PageableResult;
+import idv.rennnhong.common.response.ResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-
-import java.util.Collection;
-import java.util.UUID;
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.UUID;
+
+import static idv.rennnhong.common.response.ErrorMessages.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -58,9 +48,6 @@ public class UserController {
     @Autowired
     private PermissionService permissionService;
 
-    @Autowired
-    private UserMapper userMapper;
-
     @GetMapping
     @ApiOperation("取得使用者資料")
     public ResponseEntity getUsers(@RequestParam(defaultValue = "1") int pageNumber,
@@ -72,12 +59,25 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation("查詢使用者資料 By userId")
-    public ResponseEntity<Object> getUserByUserId(@PathVariable UUID id) {
+    public ResponseEntity<Object> getUserById(@PathVariable UUID id) {
         if ("".equals(id)) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
                     HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(userService.getById(id), HttpStatus.OK);
+    }
+
+
+    @GetMapping(params = {"account"})
+    @ApiOperation("查詢使用者資料 By Account")
+    public ResponseEntity<Object> getUserByAccount(@RequestParam("account") String account) {
+        if ("".equals(account)) {
+            return new ResponseEntity<Object>(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
+                    HttpStatus.BAD_REQUEST);
+        }
+        UserDto user = userService.getUserByAccount(account);
+        ResponseBody<UserDto> responseBody = ResponseBody.newSingleBody(user);
+        return new ResponseEntity(responseBody, HttpStatus.OK);
     }
 
     @PostMapping
@@ -90,19 +90,6 @@ public class UserController {
         return new ResponseEntity(
                 ResponseBody.newErrorMessageBody(REQUEST_DUPLICATE_DATA),
                 HttpStatus.BAD_REQUEST);
-    }
-
-
-    @GetMapping(params = {"account"})
-    @ApiOperation("查詢使用者資料 By Account")
-    public ResponseEntity<Object> getUserByUserAccount(@RequestParam("account") String account) {
-        if ("".equals(account)) {
-            return new ResponseEntity<Object>(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
-                    HttpStatus.BAD_REQUEST);
-        }
-        UserDto user = userService.getUserByAccount(account);
-        ResponseBody<UserDto> responseBody = ResponseBody.newSingleBody(user);
-        return new ResponseEntity(responseBody, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

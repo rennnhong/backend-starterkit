@@ -149,6 +149,12 @@ public class RoleServiceImpl implements RoleService {
         return ImmutableSet.copyOf(roleMapper.toDto(roles));
     }
 
+    @Override
+    public boolean isRoleReferenced(UUID id) {
+        Role role = roleDao.findById(id).get();
+        return role.getUsers().size() > 0;
+    }
+
 //    @Override
 //    public List<ApiDTO> getAllApiByRole(RoleDTO role, String url, String httpMethod) {
 //        Role roleEntity = roleDao.findById(role.getId()).get();

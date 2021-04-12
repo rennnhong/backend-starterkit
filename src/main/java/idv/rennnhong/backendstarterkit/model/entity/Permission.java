@@ -3,10 +3,9 @@ package idv.rennnhong.backendstarterkit.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import idv.rennnhong.common.persistence.AuditableEntity;
 import idv.rennnhong.common.persistence.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,11 +22,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "SysPermission")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Permission extends AuditableEntity<String,UUID> {
+public class Permission extends AuditableEntity<String, UUID> {
 
     public Permission(String name, String icon, String route, Integer sorted, Integer opened, Set<Action> actions,
                       Permission parent, Set<Permission> children) {
@@ -40,11 +39,6 @@ public class Permission extends AuditableEntity<String,UUID> {
         this.parent = parent;
         this.children = children;
     }
-
-    @Id
-    @GeneratedValue
-    @Type(type="uuid-char")
-    private UUID id;
 
     @Column(nullable = false)
     String name;
@@ -61,7 +55,7 @@ public class Permission extends AuditableEntity<String,UUID> {
     @Column
     Integer opened;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     Set<Action> actions;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,5 +64,7 @@ public class Permission extends AuditableEntity<String,UUID> {
 
     @OneToMany(mappedBy = "parent")
     Set<Permission> children;
+
+
 
 }

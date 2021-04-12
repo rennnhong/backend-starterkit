@@ -68,7 +68,7 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public ActionDto update(UUID id, UpdateActionRequestDto updateActionRequestDto) {
+    public ActionDto update(UUID id, UUID permissionId, UpdateActionRequestDto updateActionRequestDto) {
         Action action = actionDao.findById(id).get();
         actionMapper.updateEntity(action, updateActionRequestDto);
         Action updatedAction = actionDao.save(action);

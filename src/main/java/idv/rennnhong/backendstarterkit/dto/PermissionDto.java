@@ -2,8 +2,10 @@ package idv.rennnhong.backendstarterkit.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
-public class PermissionDto{
+public class PermissionDto {
 
     private String name;
 
@@ -11,7 +13,7 @@ public class PermissionDto{
     private String icon;
 
 
-    private  String route;
+    private String route;
 
 
     private Integer sorted;
@@ -20,7 +22,7 @@ public class PermissionDto{
     private Integer opened;
 
 
-    private  String masterId;
+    private UUID parentId;
 
 
 }

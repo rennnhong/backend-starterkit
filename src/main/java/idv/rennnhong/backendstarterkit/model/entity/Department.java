@@ -23,11 +23,6 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Department extends AuditableEntity<String,UUID> {
 
-//    @Id
-//    @GeneratedValue
-//    @Type(type="uuid-char")
-//    private UUID id;
-
     @Column(nullable = false)
     String masterId;
 

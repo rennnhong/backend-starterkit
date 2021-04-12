@@ -21,11 +21,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Codes extends AuditableEntity<String,UUID> {
 
-//    @Id
-//    @GeneratedValue
-//    @Type(type="uuid-char")
-//    private UUID id;
-
     @Column(nullable = false)
     String masterId;
 

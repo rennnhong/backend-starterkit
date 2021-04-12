@@ -30,4 +30,6 @@ public interface RoleService {
 
     Set<RoleDto> getRolesByUserId(UUID userId);
 
+    boolean isRoleReferenced(UUID id);
+
 }
