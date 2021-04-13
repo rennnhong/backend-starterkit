@@ -70,7 +70,7 @@ Authorization: KangDa {{token}}
 
 
 ### 刪除使用者個人資料
-DELETE {{serverUrl}}/api/users/ea190a6d-c90d-47ff-9928-c4ce2c602379
+DELETE {{serverUrl}}/api/users/e027ecdd-f75c-4f0d-a016-93089b709dc2
 Content-Type: application/json
 Authorization: KangDa {{token}}
 

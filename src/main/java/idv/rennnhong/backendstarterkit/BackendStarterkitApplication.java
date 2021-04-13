@@ -6,9 +6,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.Managemen
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-
-import javax.persistence.EntityManager;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication(
         exclude = {
@@ -19,6 +17,8 @@ import javax.persistence.EntityManager;
 public class BackendStarterkitApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BackendStarterkitApplication.class, args);
+        SpringApplication springApplication = new SpringApplication(SpringApplicationBuilder.class);
+        springApplication.addInitializers(new CustomApplicationContextInitializer());
+        springApplication.run(args);
     }
 }
