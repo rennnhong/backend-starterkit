@@ -8,9 +8,9 @@ import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequest
 import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
-import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
-import idv.rennnhong.backendstarterkit.model.dao.UserDao;
+import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
+import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
+import idv.rennnhong.backendstarterkit.model.dao.UserRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.service.UserService;
@@ -32,37 +32,37 @@ import java.util.stream.Collectors;
 @Service
 class UserServiceImpl implements UserService {
 
-    final UserDao userDao;
+    final UserRepository userRepository;
 
     final UserMapper userMapper;
 
     @Autowired
-    RoleDao roleDao;
+    RoleRepository roleRepository;
 
     @Autowired
-    PermissionDao permissionDao;
+    PermissionRepository permissionRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, UserMapper userMapper) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
 
     @Override
     public UserDto getUserByAccount(String account) {
-        return userMapper.toDto(userDao.findByAccount(account));
+        return userMapper.toDto(userRepository.findByAccount(account));
     }
 
     @Override
     public List<UserDto> getAll() {
-        List<User> users = userDao.findAll();
+        List<User> users = userRepository.findAll();
         return Lists.newArrayList(userMapper.toDto(users));
     }
 
     @Override
     public UserDto getById(UUID uuid) {
-        User user = userDao.findById(uuid).get();
+        User user = userRepository.findById(uuid).get();
         return userMapper.toDto(user);
     }
 
@@ -73,20 +73,20 @@ class UserServiceImpl implements UserService {
         //處理Roles
         if (!ObjectUtils.isEmpty(dto.getRoleIds())) setUserRoles(user, dto.getRoleIds());
 
-        User savedUser = userDao.save(user);
+        User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
 
     @Override
     public UserDto update(UUID id, UpdateUserRequestDto dto) {
-        User user = userDao.findById(id).get();
+        User user = userRepository.findById(id).get();
         userMapper.updateEntity(user, dto);
 
         //處理Roles
         user.getRoles().clear();
         if (!ObjectUtils.isEmpty(dto.getRoleIds())) setUserRoles(user, dto.getRoleIds());
 
-        User updatedUser = userDao.save(user);
+        User updatedUser = userRepository.save(user);
         return userMapper.toDto(updatedUser);
     }
 
@@ -94,18 +94,18 @@ class UserServiceImpl implements UserService {
         List<UUID> uuidList = roleIds.stream()
                 .map(roleId -> UUID.fromString(roleId))
                 .collect(Collectors.toList());
-        List<Role> roles = roleDao.findAllByIdIn(uuidList);
+        List<Role> roles = roleRepository.findAllByIdIn(uuidList);
         user.getRoles().addAll(roles);
     }
 
     @Override
     public void delete(UUID id) {
-        userDao.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public boolean isExist(UUID id) {
-        return userDao.existsById(id);
+        return userRepository.existsById(id);
     }
 
 //    @Override
@@ -114,11 +114,11 @@ class UserServiceImpl implements UserService {
 //                .map(roleId -> UUID.fromString(roleId))
 //                .collect(Collectors.toList());
 //
-//        List<Role> roles = roleDao.findAllByIdIn(uuidList);
+//        List<Role> roles = roleRepository.findAllByIdIn(uuidList);
 //
 //        User user = userMapper.toEntity(userDto);
 //        user.setRoles(Sets.newHashSet(roles));
-//        User savedUser = userDao.save(user);
+//        User savedUser = userRepository.save(user);
 //        return userMapper.toDto(savedUser);
 //    }
 
@@ -129,7 +129,7 @@ class UserServiceImpl implements UserService {
                 .addRowsPerPage(rowsPerPage)
                 .build();
 
-        Page<User> resultPage = userDao.findAll(
+        Page<User> resultPage = userRepository.findAll(
                 PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<UserDto> userDtos = ImmutableList.copyOf(userMapper.toDto(resultPage.getContent()));
@@ -144,14 +144,14 @@ class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExistByAccount(String userAccount) {
-        return userDao.existsByAccount(userAccount);
+        return userRepository.existsByAccount(userAccount);
     }
 
     @Override
     public Collection<UserDto> getUsersOfRole(UUID roleId) {
-        Role role = roleDao.findById(roleId).get();
+        Role role = roleRepository.findById(roleId).get();
         List<Role> roles = Collections.singletonList(role);
-        Collection<User> users = userDao.findAllByRolesIsIn(roles);
+        Collection<User> users = userRepository.findAllByRolesIsIn(roles);
         return userMapper.toDto(users);
     }
 

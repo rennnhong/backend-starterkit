@@ -6,8 +6,8 @@ import idv.rennnhong.backendstarterkit.controller.request.api.UpdateApiRequestDt
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ApiMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ApiDao;
-import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
+import idv.rennnhong.backendstarterkit.model.dao.ApiRepository;
+import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Api;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
@@ -24,26 +24,26 @@ import java.util.stream.Collectors;
 @Service
 public class ApiServiceImpl implements ApiService {
 
-    final ApiDao apiDao;
+    final ApiRepository apiRepository;
 
     final ApiMapper apiMapper;
 
-    RoleDao roleDao;
+    RoleRepository roleRepository;
 
     @Autowired
-    public void setRoleDao(RoleDao roleDao) {
-        this.roleDao = roleDao;
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     @Autowired
-    public ApiServiceImpl(ApiDao apiDao, ApiMapper apiMapper) {
-        this.apiDao = apiDao;
+    public ApiServiceImpl(ApiRepository apiRepository, ApiMapper apiMapper) {
+        this.apiRepository = apiRepository;
         this.apiMapper = apiMapper;
     }
 
     @Override
     public List<ApiDto> getAllApiByRole(UUID roleId, String url, String httpMethod) {
-        Role roleEntity = roleDao.findById(roleId).get();
+        Role roleEntity = roleRepository.findById(roleId).get();
         Set<RolePermission> rolePermissions = roleEntity.getRolePermissions();
 
 //        List<Api> apiList = rolePermissions.stream()
@@ -55,44 +55,44 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public Collection<ApiDto> getAll() {
-        List<Api> apis = apiDao.findAll();
+        List<Api> apis = apiRepository.findAll();
         return apiMapper.toDto(apis);
     }
 
     @Override
     public ApiDto getById(UUID id) {
-        Api api = apiDao.findById(id).get();
+        Api api = apiRepository.findById(id).get();
         return apiMapper.toDto(api);
     }
 
     @Override
     public ApiDto save(CreateApiRequestDto createApiRequestDto) {
         Api entity = apiMapper.createEntity(createApiRequestDto);
-        apiDao.save(entity);
+        apiRepository.save(entity);
         return apiMapper.toDto(entity);
     }
 
     @Override
     public ApiDto update(UUID id, UpdateApiRequestDto updateApiRequestDto) {
-        Api api = apiDao.findById(id).get();
+        Api api = apiRepository.findById(id).get();
         apiMapper.updateEntity(api, updateApiRequestDto);
         return apiMapper.toDto(api);
     }
 
     @Override
     public void delete(UUID id) {
-        apiDao.deleteById(id);
+        apiRepository.deleteById(id);
     }
 
     @Override
     public boolean isExist(UUID id) {
-        return apiDao.existsById(id);
+        return apiRepository.existsById(id);
     }
 
     @Override
     public List<ApiDto> getAllApiByRoles(List<UUID> roleIds, String url, String httpMethod) {
 
-        List<Role> roleEntities = roleDao.findAllByIdIn(roleIds);
+        List<Role> roleEntities = roleRepository.findAllByIdIn(roleIds);
 
         List<Set<RolePermission>> collect = roleEntities.stream().map(roleEntity -> roleEntity.getRolePermissions())
                 .collect(Collectors.toList());

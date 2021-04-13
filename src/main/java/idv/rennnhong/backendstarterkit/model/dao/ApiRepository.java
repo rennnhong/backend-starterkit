@@ -1,9 +1,9 @@
 package idv.rennnhong.backendstarterkit.model.dao;
 
 import idv.rennnhong.backendstarterkit.model.entity.Api;
-import idv.rennnhong.common.BaseDao;
+import idv.rennnhong.common.BaseRepository;
 import java.util.UUID;
 
-public interface ApiDao extends BaseDao<Api, UUID> {
+public interface ApiRepository extends BaseRepository<Api, UUID> {
 
 }

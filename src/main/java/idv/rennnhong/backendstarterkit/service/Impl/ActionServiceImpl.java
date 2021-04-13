@@ -6,8 +6,8 @@ import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionReq
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ActionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ActionDao;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
+import idv.rennnhong.backendstarterkit.model.dao.ActionRepository;
+import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Action;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.service.ActionService;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @Service
 public class ActionServiceImpl implements ActionService {
 
-    final ActionDao actionDao;
+    final ActionRepository actionRepository;
 
     final ActionMapper actionMapper;
 
     PermissionMapper permissionMapper;
 
-    PermissionDao permissionDao;
+    PermissionRepository permissionRepository;
 
     @Autowired
     public void setPermissionMapper(PermissionMapper permissionMapper) {
@@ -37,52 +37,52 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Autowired
-    public void setPermissionDao(PermissionDao permissionDao) {
-        this.permissionDao = permissionDao;
+    public void setPermissionRepository(PermissionRepository permissionRepository) {
+        this.permissionRepository = permissionRepository;
     }
 
     @Autowired
-    public ActionServiceImpl(ActionDao actionDao, ActionMapper actionMapper) {
-        this.actionDao = actionDao;
+    public ActionServiceImpl(ActionRepository actionRepository, ActionMapper actionMapper) {
+        this.actionRepository = actionRepository;
         this.actionMapper = actionMapper;
     }
 
     @Override
     public Collection<ActionDto> getAll(UUID permissionId) {
-        Permission permission = permissionDao.findById(permissionId).get();
-        List<Action> actions = actionDao.findAllByPermission(permission);
+        Permission permission = permissionRepository.findById(permissionId).get();
+        List<Action> actions = actionRepository.findAllByPermission(permission);
         return actionMapper.toDto(actions);
     }
 
     @Override
     public ActionDto getById(UUID id) {
-        Action action = actionDao.findById(id).get();
+        Action action = actionRepository.findById(id).get();
         return actionMapper.toDto(action);
     }
 
     @Override
     public ActionDto save(CreateActionRequestDto createActionRequestDto) {
         Action action = actionMapper.createEntity(createActionRequestDto);
-        Action savedAction = actionDao.save(action);
+        Action savedAction = actionRepository.save(action);
         return actionMapper.toDto(savedAction);
     }
 
     @Override
     public ActionDto update(UUID id, UUID permissionId, UpdateActionRequestDto updateActionRequestDto) {
-        Action action = actionDao.findById(id).get();
+        Action action = actionRepository.findById(id).get();
         actionMapper.updateEntity(action, updateActionRequestDto);
-        Action updatedAction = actionDao.save(action);
+        Action updatedAction = actionRepository.save(action);
         return actionMapper.toDto(updatedAction);
     }
 
     @Override
     public void delete(UUID id) {
-        actionDao.deleteById(id);
+        actionRepository.deleteById(id);
     }
 
     @Override
     public boolean isExist(UUID id) {
-        return actionDao.existsById(id);
+        return actionRepository.existsById(id);
     }
 
     @Override
@@ -93,22 +93,22 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public Set<ActionDto> getActionsByPermissionId(String permissionId) {
-        Permission permission = permissionDao.findById(UUID.fromString(permissionId)).get();
+        Permission permission = permissionRepository.findById(UUID.fromString(permissionId)).get();
         return ImmutableSet.copyOf(actionMapper.toDto(permission.getActions()));
     }
 
 //    @Override
 //    public ActionDto save(String permissionId, ActionDto actionDto) {
-//        Permission permission = permissionDao.findById(UUID.fromString(permissionId)).get();
+//        Permission permission = permissionRepository.findById(UUID.fromString(permissionId)).get();
 //        Action action = actionMapper.toEntity(actionDto);
 //        permission.getActions().add(action);
-//        permissionDao.save(permission);
+//        permissionRepository.save(permission);
 //        return actionMapper.toDto(action);
 //    }
 //
 //    @Override
 //    public ActionDto update(String actionId, ActionDto actionDto) {
-//        Action action = actionDao.findById(UUID.fromString(actionId)).get();
+//        Action action = actionRepository.findById(UUID.fromString(actionId)).get();
 //        actionMapper.populateDto(action,actionDto);
 //
 //    }

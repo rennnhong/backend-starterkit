@@ -8,10 +8,10 @@ import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto
 import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ActionDao;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
-import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
-import idv.rennnhong.backendstarterkit.model.dao.UserDao;
+import idv.rennnhong.backendstarterkit.model.dao.ActionRepository;
+import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
+import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
+import idv.rennnhong.backendstarterkit.model.dao.UserRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
@@ -33,90 +33,90 @@ import java.util.UUID;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    final RoleDao roleDao;
+    final RoleRepository roleRepository;
 
     final RoleMapper roleMapper;
 
-    PermissionDao permissionDao;
+    PermissionRepository permissionRepository;
 
-    ActionDao actionDao;
+    ActionRepository actionRepository;
 
-    UserDao userDao;
+    UserRepository userRepository;
 
     @Autowired
-    public void setPermissionDao(PermissionDao permissionDao) {
-        this.permissionDao = permissionDao;
+    public void setPermissionRepository(PermissionRepository permissionRepository) {
+        this.permissionRepository = permissionRepository;
     }
 
     @Autowired
-    public void setActionDao(ActionDao actionDao) {
-        this.actionDao = actionDao;
+    public void setActionRepository(ActionRepository actionRepository) {
+        this.actionRepository = actionRepository;
     }
 
     @Autowired
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Autowired
-    public RoleServiceImpl(RoleDao roleDao, RoleMapper roleMapper) {
-//        super(roleDao, roleMapper);
-        this.roleDao = roleDao;
+    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
+//        super(roleRepository, roleMapper);
+        this.roleRepository = roleRepository;
         this.roleMapper = roleMapper;
     }
 
 
     @Override
     public Collection<RoleDto> getAll() {
-        List<Role> roles = roleDao.findAll();
+        List<Role> roles = roleRepository.findAll();
         return Lists.newArrayList(roleMapper.toDto(roles));
     }
 
     @Override
     public RoleDto getById(UUID id) {
-        Role role = roleDao.findById(id).get();
+        Role role = roleRepository.findById(id).get();
         return roleMapper.toDto(role);
     }
 
     @Override
     public RoleDto save(CreateRoleRequestDto createRoleRequestDto) {
         Role role = roleMapper.createEntity(createRoleRequestDto);
-        Role savedRole = roleDao.save(role);
+        Role savedRole = roleRepository.save(role);
         return roleMapper.toDto(savedRole);
     }
 
     @Override
     public RoleDto update(UUID id, UpdateRoleRequestDto updateRoleRequestDto) {
-        Role role = roleDao.findById(id).get();
+        Role role = roleRepository.findById(id).get();
         roleMapper.updateEntity(role, updateRoleRequestDto);
 
-        Role updatedRole = roleDao.save(role);
+        Role updatedRole = roleRepository.save(role);
         return roleMapper.toDto(updatedRole);
     }
 
     @Override
     public void delete(UUID id) {
-        roleDao.deleteById(id);
+        roleRepository.deleteById(id);
     }
 
     @Override
     public boolean isExist(UUID id) {
-        return roleDao.existsById(id);
+        return roleRepository.existsById(id);
     }
 
     @Override
     public RoleDto updateRolePage(UUID roleId, UUID pageId, List<UUID> actionIds) {
-        Role role = roleDao.findById(roleId).get();
-        Permission permission = permissionDao.findById(pageId).get();
+        Role role = roleRepository.findById(roleId).get();
+        Permission permission = permissionRepository.findById(pageId).get();
         Set<RolePermission> rolePermissions = role.getRolePermissions();
         rolePermissions.clear();
 
         actionIds.stream()
                 .forEach(actionId -> {
                     rolePermissions
-                            .add(new RolePermission(permission, actionDao.findById(actionId).get()));
+                            .add(new RolePermission(permission, actionRepository.findById(actionId).get()));
                 });
-        Role updatedRole = roleDao.save(role);
+        Role updatedRole = roleRepository.save(role);
 
         return roleMapper.toDto(updatedRole);
     }
@@ -129,7 +129,7 @@ public class RoleServiceImpl implements RoleService {
                 .addRowsPerPage(rowsPerPage)
                 .build();
 
-        Page<Role> resultPage = roleDao.findAll(
+        Page<Role> resultPage = roleRepository.findAll(
                 PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<RoleDto> roleDtos = ImmutableList.copyOf(roleMapper.toDto(resultPage.getContent()));
@@ -144,20 +144,20 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Set<RoleDto> getRolesByUserId(UUID userId) {
-        User user = userDao.findById(userId).get();
+        User user = userRepository.findById(userId).get();
         Set<Role> roles = user.getRoles();
         return ImmutableSet.copyOf(roleMapper.toDto(roles));
     }
 
     @Override
     public boolean isRoleReferenced(UUID id) {
-        Role role = roleDao.findById(id).get();
+        Role role = roleRepository.findById(id).get();
         return role.getUsers().size() > 0;
     }
 
 //    @Override
 //    public List<ApiDTO> getAllApiByRole(RoleDTO role, String url, String httpMethod) {
-//        Role roleEntity = roleDao.findById(role.getId()).get();
+//        Role roleEntity = roleRepository.findById(role.getId()).get();
 //        Set<RolePermission> rolePermissions = roleEntity.getRolePermissions();
 //
 //        List<Api> apiList = rolePermissions.stream()

@@ -8,8 +8,8 @@ import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
-import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
+import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
+import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
@@ -31,17 +31,17 @@ import java.util.stream.Collectors;
 @Service
 public class PermissionServiceImpl implements PermissionService {
 
-    final PermissionDao permissionDao;
+    final PermissionRepository permissionRepository;
 
     final PermissionMapper permissionMapper;
 
-    RoleDao roleDao;
+    RoleRepository roleRepository;
 
     RoleMapper roleMapper;
 
     @Autowired
-    public void setRoleDao(RoleDao roleDao) {
-        this.roleDao = roleDao;
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     @Autowired
@@ -50,21 +50,21 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Autowired
-    public PermissionServiceImpl(PermissionDao permissionDao, PermissionMapper permissionMapper) {
-        this.permissionDao = permissionDao;
+    public PermissionServiceImpl(PermissionRepository permissionRepository, PermissionMapper permissionMapper) {
+        this.permissionRepository = permissionRepository;
         this.permissionMapper = permissionMapper;
     }
 
 
     @Override
     public Collection<PermissionDto> getAll() {
-        List<Permission> permissions = permissionDao.findAll();
+        List<Permission> permissions = permissionRepository.findAll();
         return permissionMapper.toDto(permissions);
     }
 
     @Override
     public PermissionDto getById(UUID id) {
-        Permission permission = permissionDao.findById(id).get();
+        Permission permission = permissionRepository.findById(id).get();
         return permissionMapper.toDto(permission);
     }
 
@@ -72,34 +72,34 @@ public class PermissionServiceImpl implements PermissionService {
     public PermissionDto save(CreatePermissionRequestDto createPermissionRequestDto) {
         Permission entity = permissionMapper.createEntity(createPermissionRequestDto);
 
-        Permission parent = permissionDao.findById(createPermissionRequestDto.getParentId()).get();
+        Permission parent = permissionRepository.findById(createPermissionRequestDto.getParentId()).get();
         entity.setParent(parent);
 
-        permissionDao.save(entity);
+        permissionRepository.save(entity);
         return permissionMapper.toDto(entity);
     }
 
     @Override
     public PermissionDto update(UUID id, UpdatePermissionRequestDto updatePermissionRequestDto) {
-        Permission permission = permissionDao.findById(id).get();
+        Permission permission = permissionRepository.findById(id).get();
         permissionMapper.updateEntity(permission, updatePermissionRequestDto);
         return permissionMapper.toDto(permission);
     }
 
     @Override
     public void delete(UUID id) {
-        permissionDao.deleteById(id);
+        permissionRepository.deleteById(id);
     }
 
     @Override
     public boolean isExist(UUID id) {
-        return permissionDao.existsById(id);
+        return permissionRepository.existsById(id);
     }
 
     @Override
     public boolean isLastLayer(UUID id) {
         //若不為任何Page的pid，即為葉子節點
-        return !permissionDao.existsByParentId(id);
+        return !permissionRepository.existsByParentId(id);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class PermissionServiceImpl implements PermissionService {
                 .addRowsPerPage(rowsPerPage)
                 .build();
 
-        Page<Permission> resultPage = permissionDao.findAll(
+        Page<Permission> resultPage = permissionRepository.findAll(
                 PageRequest.of(qp.getPageOffset(), qp.getPageLimit()));
 
         List<PermissionDto> dtos = ImmutableList
@@ -125,7 +125,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Set<PermissionDto> getAllPermissions(UUID roleId) {
-        Role role = roleDao.findById(roleId).get();
+        Role role = roleRepository.findById(roleId).get();
         Set<Permission> collect = role.getRolePermissions()
                 .stream()
                 .map(rolePermission -> rolePermission.getPermission())
