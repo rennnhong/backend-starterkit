@@ -2,7 +2,7 @@ package idv.rennnhong.backendstarterkit.controller.request.user;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,7 +14,7 @@ public class CreateUserRequestDto {
 
     private String password;
 
-    private Date birthday;
+    private LocalDate birthday;
 
     private String gender;
 

@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class DataInitializer {
 
     @Autowired
@@ -105,7 +106,7 @@ public class DataInitializer {
                     fakerCN.crypto().md5(),
                     null,
                     new HashSet(),
-                    fakerCN.date().birthday(),
+                    fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     "男",
                     fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com",
                     fakerCN.phoneNumber().phoneNumber(),

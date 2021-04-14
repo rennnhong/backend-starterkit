@@ -1,9 +1,8 @@
 package idv.rennnhong.backendstarterkit.controller.request.user;
 
-import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,7 +14,7 @@ public class UpdateUserRequestDto {
 
     private String password;
 
-    private Date birthday;
+    private LocalDate birthday;
 
     private String gender;
 
