@@ -8,10 +8,10 @@ import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto
 import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ActionRepository;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
-import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
-import idv.rennnhong.backendstarterkit.model.dao.UserRepository;
+import idv.rennnhong.backendstarterkit.repository.ActionRepository;
+import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
+import idv.rennnhong.backendstarterkit.repository.RoleRepository;
+import idv.rennnhong.backendstarterkit.repository.UserRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;

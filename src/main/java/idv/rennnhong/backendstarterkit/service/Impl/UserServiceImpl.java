@@ -8,9 +8,9 @@ import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequest
 import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
-import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
-import idv.rennnhong.backendstarterkit.model.dao.UserRepository;
+import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
+import idv.rennnhong.backendstarterkit.repository.RoleRepository;
+import idv.rennnhong.backendstarterkit.repository.UserRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.service.UserService;

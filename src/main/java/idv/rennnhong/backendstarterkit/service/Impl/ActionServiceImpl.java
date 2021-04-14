@@ -6,8 +6,8 @@ import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionReq
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ActionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ActionRepository;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionRepository;
+import idv.rennnhong.backendstarterkit.repository.ActionRepository;
+import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Action;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.service.ActionService;

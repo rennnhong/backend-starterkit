@@ -6,8 +6,8 @@ import idv.rennnhong.backendstarterkit.controller.request.api.UpdateApiRequestDt
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ApiMapper;
-import idv.rennnhong.backendstarterkit.model.dao.ApiRepository;
-import idv.rennnhong.backendstarterkit.model.dao.RoleRepository;
+import idv.rennnhong.backendstarterkit.repository.ApiRepository;
+import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Api;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;

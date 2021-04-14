@@ -1,4 +1,4 @@
-package idv.rennnhong.backendstarterkit.model.dao;
+package idv.rennnhong.backendstarterkit.repository;
 
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.common.BaseRepository;

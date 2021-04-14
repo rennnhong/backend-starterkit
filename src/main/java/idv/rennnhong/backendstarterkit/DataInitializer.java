@@ -2,22 +2,10 @@ package idv.rennnhong.backendstarterkit;
 
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
-import idv.rennnhong.backendstarterkit.model.dao.ActionDao;
-import idv.rennnhong.backendstarterkit.model.dao.ApiDao;
-import idv.rennnhong.backendstarterkit.model.dao.PermissionDao;
-import idv.rennnhong.backendstarterkit.model.dao.RoleDao;
-import idv.rennnhong.backendstarterkit.model.dao.UserDao;
-import idv.rennnhong.backendstarterkit.model.entity.Action;
-import idv.rennnhong.backendstarterkit.model.entity.Permission;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
-import idv.rennnhong.backendstarterkit.model.entity.User;
-import idv.rennnhong.backendstarterkit.service.ActionService;
-import idv.rennnhong.backendstarterkit.service.ApiService;
+import idv.rennnhong.backendstarterkit.model.entity.*;
+import idv.rennnhong.backendstarterkit.repository.*;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.RoleService;
-import idv.rennnhong.backendstarterkit.service.UserService;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,15 +21,15 @@ public class DataInitializer {
     @Autowired
     PermissionService permissionService;
     @Autowired
-    UserDao userDao;
+    UserRepository userRepository;
     @Autowired
-    RoleDao roleDao;
+    RoleRepository roleRepository;
     @Autowired
-    PermissionDao permissionDao;
+    PermissionRepository permissionRepository;
     @Autowired
-    ActionDao actionDao;
+    ActionRepository actionRepository;
     @Autowired
-    ApiDao apiDao;
+    ApiRepository apiRepository;
 
     Faker fakerCN = new Faker(new Locale("zh-TW"));
 
@@ -82,7 +70,7 @@ public class DataInitializer {
             initPermission.setActions(collect);
         }
 
-        permissionDao.saveAll(initPermissions);
+        permissionRepository.saveAll(initPermissions);
 
         for (Role initRole : initRoles) {
             for (Permission initPermission : initPermissions) {
@@ -126,8 +114,8 @@ public class DataInitializer {
             user.getRoles().add(initRoles.get(random));
             initUsers.add(user);
         }
-        roleDao.saveAll(initRoles);
-        userDao.saveAll(initUsers);
+        roleRepository.saveAll(initRoles);
+        userRepository.saveAll(initUsers);
 
     }
 
