@@ -2,7 +2,7 @@ package idv.rennnhong.backendstarterkit.dto;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public class UserDto {
 
     private String account;
 
-    private Date birthday;
+    private LocalDate birthday;
 
     private String gender;
 

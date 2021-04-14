@@ -17,6 +17,10 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +38,7 @@ public class User extends AuditableEntity<String, UUID> {
 
 
     public User(String userName, String account, String password, Set<UserPermission> userPermissions,
-                Set<Role> roles, Date birthday, String gender, String email,
+                Set<Role> roles, LocalDate birthday, String gender, String email,
                 String phone, String city) {
         this.userName = userName;
         this.account = account;
@@ -71,8 +75,7 @@ public class User extends AuditableEntity<String, UUID> {
     private Set<Role> roles;
 
     @Column
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+    private LocalDate birthday;
 
     @Column
     private String gender;
