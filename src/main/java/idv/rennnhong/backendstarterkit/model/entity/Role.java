@@ -35,7 +35,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @SQLDelete(sql = "update sys_role set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
-public class Role extends AuditableEntity<String, UUID> {
+public class Role extends AuditableEntity<String> {
 
 
     public Role(String name, String code, Set<User> users, Set<RolePermission> rolePermissions) {

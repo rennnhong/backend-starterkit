@@ -22,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Api extends AuditableEntity<String, UUID> {
+public class Api extends AuditableEntity<String> {
 
     @Column(nullable = false)
     String url;

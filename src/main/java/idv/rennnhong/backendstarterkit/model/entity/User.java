@@ -34,7 +34,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @SQLDelete(sql="update sys_user set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
-public class User extends AuditableEntity<String, UUID> {
+public class User extends AuditableEntity<String> {
 
 
     public User(String userName, String account, String password, Set<UserPermission> userPermissions,

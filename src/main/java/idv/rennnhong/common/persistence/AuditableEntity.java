@@ -17,7 +17,7 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditableEntity<T, ID> extends BaseEntity<ID> {
+public abstract class AuditableEntity<T> extends BaseEntity {
 
     @CreatedBy//創建者
     @Column(updatable = false)

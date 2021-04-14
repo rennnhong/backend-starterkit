@@ -26,7 +26,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Permission extends AuditableEntity<String, UUID> {
+public class Permission extends AuditableEntity<String> {
 
     public Permission(String name, String icon, String route, Integer sorted, Integer opened, Set<Action> actions,
                       Permission parent, Set<Permission> children) {

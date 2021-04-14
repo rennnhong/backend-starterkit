@@ -1,11 +1,7 @@
 package idv.rennnhong.common.persistence;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.springframework.util.IdGenerator;
 
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
@@ -13,20 +9,37 @@ import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
-@Getter
-@Setter
-public abstract class BaseEntity<ID> {
+public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue
     @Type(type="uuid-char")
-    protected ID id;
+    protected UUID id = UUID.randomUUID();
+
+    @Version
+    int version;
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BaseEntity<?> that = (BaseEntity<?>) o;
+        BaseEntity that = (BaseEntity) o;
 
         if (id == that.getId()) return true;
         if (id == null) return false;

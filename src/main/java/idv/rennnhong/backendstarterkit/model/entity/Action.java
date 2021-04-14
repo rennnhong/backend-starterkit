@@ -23,7 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Action extends AuditableEntity<String,UUID> {
+public class Action extends AuditableEntity<String> {
 
     public Action(String name, String icon, Integer sorted, Integer disabled, String functionName, Api api) {
         this.name = name;

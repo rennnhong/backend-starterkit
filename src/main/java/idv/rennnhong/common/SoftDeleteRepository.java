@@ -8,7 +8,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
 @NoRepositoryBean
-public interface SoftDeleteRepository<T extends BaseEntity<ID>,ID> extends BaseRepository<T,ID>{
+public interface SoftDeleteRepository<T extends BaseEntity,ID> extends BaseRepository<T,ID>{
     @Override
     default void deleteInBatch(Iterable<T> entities) {
         throw new NotImplementedException();
