@@ -37,7 +37,7 @@ Content-Type: application/json
 Authorization: KangDa {{token}}
 
 ### 更新使用者(不設role，模擬將使用者的role全部取消)
-PUT {{serverUrl}}/api/users/ea190a6d-c90d-47ff-9928-c4ce2c602379
+PUT {{serverUrl}}/api/users/4d49364d-08ec-40bb-884c-49aff4f6c697
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
@@ -51,7 +51,7 @@ Authorization: KangDa {{token}}
 }
 
 ### 更新使用者
-PUT {{serverUrl}}/api/users/ea190a6d-c90d-47ff-9928-c4ce2c602379
+PUT {{serverUrl}}/api/users/0edd9526-6dab-49ac-bda7-1b862d58c0af
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
@@ -63,8 +63,7 @@ Authorization: KangDa {{token}}
   "gender": "男",
   "phone": "3345678",
   "roleIds": [
-    "ace05b5c-7a0d-4fdf-95fc-6e16e8c97116",
-    "c3530613-335e-4e37-a455-91029e088fb4"
+    "04b6b5e0-4d6b-49f3-9f01-46647c45ed20"
   ]
 }
 

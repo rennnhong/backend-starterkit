@@ -5,11 +5,12 @@ import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.common.SoftDeleteRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository extends SoftDeleteRepository<User, UUID> {
 
-    User findByAccount(String account);
+    Optional<User> findByAccount(String account);
 
     boolean existsByAccount(String account);
 
