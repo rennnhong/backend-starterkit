@@ -6,11 +6,13 @@ import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequest
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
+import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
+import idv.rennnhong.backendstarterkit.exception.ExceptionType;
+import idv.rennnhong.backendstarterkit.model.entity.Role;
+import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.repository.UserRepository;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.query.PageableResultImpl;
@@ -20,8 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
-import idv.rennnhong.backendstarterkit.exception.ExceptionType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,7 +113,11 @@ class UserServiceImpl implements UserService {
 
     @Override
     public void delete(UUID id) {
-        userRepository.deleteById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.orElseThrow(() ->
+                ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
+        userRepository.delete(user);
     }
 
     @Override

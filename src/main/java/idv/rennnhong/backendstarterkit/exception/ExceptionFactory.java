@@ -58,8 +58,8 @@ public class ExceptionFactory {
     }
 
     private static RuntimeException newException(ExceptionType exceptionType, String key, String... args) {
-        String format = format(key, args);
-        return ExceptionFactory.exceptions.get(exceptionType).apply(format);
+        String message = format(key, args);
+        return ExceptionFactory.exceptions.get(exceptionType).apply(message);
     }
 
     private static String getMessageTemplateKey(GroupType groupType, ExceptionType exceptionType) {
