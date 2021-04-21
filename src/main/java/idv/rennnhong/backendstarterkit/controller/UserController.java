@@ -3,11 +3,8 @@ package idv.rennnhong.backendstarterkit.controller;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
-import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.UserService;
-import idv.rennnhong.backendstarterkit.web.utils.JwtTokenUtils;
 import idv.rennnhong.backendstarterkit.web.utils.MapValidationErrorService;
-import idv.rennnhong.backendstarterkit.web.utils.ValidationHelper;
 import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.response.ResponseBody;
@@ -25,10 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 
-import static idv.rennnhong.common.response.ErrorMessages.*;
+import static idv.rennnhong.common.response.ErrorMessages.INVALID_FIELDS_REQUEST;
 
 @RestController
 @RequestMapping("/api/users")
