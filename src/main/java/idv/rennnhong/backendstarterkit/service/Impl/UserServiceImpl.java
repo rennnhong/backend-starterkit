@@ -2,17 +2,17 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
+import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
+import idv.rennnhong.backendstarterkit.exception.ExceptionType;
+import idv.rennnhong.backendstarterkit.model.entity.Role;
+import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.repository.UserRepository;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.query.PageableResultImpl;
@@ -23,11 +23,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static idv.rennnhong.backendstarterkit.exception.GroupType.USER;
 
 @Service
 class UserServiceImpl implements UserService {
@@ -51,7 +50,11 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByAccount(String account) {
-        return userMapper.toDto(userRepository.findByAccount(account));
+        Optional<User> optionalUser = userRepository.findByAccount(account);
+        User user = optionalUser.orElseThrow(() ->
+                ExceptionFactory.newExceptionWithId(USER, ExceptionType.ENTITY_NOT_FOUND,2, account)
+        );
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -62,12 +65,18 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getById(UUID uuid) {
-        User user = userRepository.findById(uuid).get();
+        Optional<User> optionalUser = userRepository.findById(uuid);
+        User user = optionalUser.orElseThrow(() ->
+                ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, uuid.toString())
+        );
         return userMapper.toDto(user);
     }
 
     @Override
     public UserDto save(CreateUserRequestDto dto) {
+        if(userRepository.existsByAccount(dto.getAccount()))
+            throw ExceptionFactory.newException(USER, ExceptionType.DUPLICATE_ENTITY, dto.getAccount());
+
         User user = userMapper.createEntity(dto);
 
         //處理Roles
@@ -79,7 +88,11 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UUID id, UpdateUserRequestDto dto) {
-        User user = userRepository.findById(id).get();
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.orElseThrow(() ->
+                ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
+
         userMapper.updateEntity(user, dto);
 
         //處理Roles
@@ -100,27 +113,17 @@ class UserServiceImpl implements UserService {
 
     @Override
     public void delete(UUID id) {
-        userRepository.deleteById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.orElseThrow(() ->
+                ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
+        userRepository.delete(user);
     }
 
     @Override
     public boolean isExist(UUID id) {
         return userRepository.existsById(id);
     }
-
-//    @Override
-//    public UserDto save(UserDto userDto) {
-//        List<UUID> uuidList = userDto.getRoles().stream()
-//                .map(roleId -> UUID.fromString(roleId))
-//                .collect(Collectors.toList());
-//
-//        List<Role> roles = roleRepository.findAllByIdIn(uuidList);
-//
-//        User user = userMapper.toEntity(userDto);
-//        user.setRoles(Sets.newHashSet(roles));
-//        User savedUser = userRepository.save(user);
-//        return userMapper.toDto(savedUser);
-//    }
 
     @Override
     public PageableResult<UserDto> pageAll(Integer pageNumber, Integer rowsPerPage) {

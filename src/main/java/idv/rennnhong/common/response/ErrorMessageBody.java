@@ -1,14 +1,12 @@
 package idv.rennnhong.common.response;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter(AccessLevel.PACKAGE)
-@AllArgsConstructor
-public class ErrorMessageBody  {
+@RequiredArgsConstructor
+public class ErrorMessageBody {
     private final int code;
-    private final String errorMessage;
+    private final String message;
+    private Object details;
 }

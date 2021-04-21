@@ -16,7 +16,7 @@ public interface ActionService {
 
     ActionDto getById(UUID id);
 
-    ActionDto save(CreateActionRequestDto createActionRequestDto);
+    ActionDto save(UUID permissionId, CreateActionRequestDto createActionRequestDto);
 
     ActionDto update(UUID id, UUID permissionId, UpdateActionRequestDto updateActionRequestDto);
 

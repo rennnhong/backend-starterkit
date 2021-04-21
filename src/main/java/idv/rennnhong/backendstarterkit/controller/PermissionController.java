@@ -9,7 +9,6 @@ import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.service.ActionService;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.common.query.PageableResult;
-import idv.rennnhong.common.response.ErrorMessages;
 import idv.rennnhong.common.response.ResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -86,9 +85,6 @@ public class PermissionController {
     @DeleteMapping("/{id}")
     @ApiOperation("刪除頁面資料")
     public ResponseEntity<?> deletePermission(@PathVariable UUID id) {
-        if (!permissionService.isExist(id)) {
-            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
-        }
         permissionService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -97,10 +93,7 @@ public class PermissionController {
     @ApiOperation("新增頁面功能資料")
     public ResponseEntity createAction(@PathVariable UUID pageId,
                                        @RequestBody CreateActionRequestDto createActionRequestDto) {
-        if (!permissionService.isExist(pageId)) {
-            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
-        }
-        ActionDto savedAction = actionService.save(createActionRequestDto);
+        ActionDto savedAction = actionService.save(pageId,createActionRequestDto);
         ResponseBody<ActionDto> responseBody = ResponseBody.newSingleBody(savedAction);
         return new ResponseEntity(responseBody, HttpStatus.CREATED);
     }
@@ -111,11 +104,7 @@ public class PermissionController {
     public ResponseEntity updateAction(@PathVariable UUID permissionId,
                                        @PathVariable UUID actionId,
                                        @RequestBody UpdateActionRequestDto updateActionRequestDto) {
-
-        if (!actionService.isExist(actionId)) {
-            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
-        }
-        ActionDto updatedAction = actionService.update(permissionId, actionId, updateActionRequestDto);
+        ActionDto updatedAction = actionService.update(actionId, permissionId, updateActionRequestDto);
         ResponseBody<ActionDto> responseBody = ResponseBody.newSingleBody(updatedAction);
         return ResponseEntity.ok(responseBody);
     }
@@ -124,9 +113,6 @@ public class PermissionController {
     @DeleteMapping("/actions/{actionId}")
     @ApiOperation("刪除頁面功能資料")
     public ResponseEntity<?> deleteAction(@PathVariable UUID actionId, @PathVariable UUID pageId) {
-        if (!actionService.isExist(actionId)) {
-            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
-        }
         actionService.delete(actionId);
         return ResponseEntity.noContent().build();
     }

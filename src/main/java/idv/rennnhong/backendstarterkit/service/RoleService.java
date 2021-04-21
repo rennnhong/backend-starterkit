@@ -1,6 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
 import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.common.query.PageableResult;
@@ -24,12 +25,13 @@ public interface RoleService {
 
     boolean isExist(UUID id);
 
-    RoleDto updateRolePage(UUID roleId, UUID pageId, List<UUID> actionIds);
+//    RoleDto updateRolePermission(UUID roleId, List<RolePermissionDto> rolePermissionDtos);
+    RoleDto updateRolePermission(UUID roleId, UUID permissionId, List<UUID> actionIds);
 
     PageableResult<RoleDto> pageAll(Integer pageNumber, Integer rowsPerPage);
 
     Set<RoleDto> getRolesByUserId(UUID userId);
 
-    boolean isRoleReferenced(UUID id);
+//    boolean isRoleReferenced(UUID id);
 
 }

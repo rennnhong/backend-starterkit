@@ -46,7 +46,7 @@ public abstract class ResponseBody<T> {
     }
 
     public static <T> CollectionResponseBody<T> newPageableBody(
-        Collection<T> result, int number, int size, long totalElements, int totalPages) {
+            Collection<T> result, int number, int size, long totalElements, int totalPages) {
         CollectionResponseBody<T> body = new CollectionResponseBody();
         PageMetadata pageMetadata = new PageMetadata(size, totalElements, totalPages, number);
         body.setPayload(result);
@@ -56,17 +56,22 @@ public abstract class ResponseBody<T> {
 
     public static <T> ResponseBody<Collection<T>> newPageableBody(PageableResult<T> pageableResult) {
         return newPageableBody(
-            pageableResult.getResult(),
-            pageableResult.getNumber(),
-            pageableResult.getSize(),
-            pageableResult.getTotalElements(),
-            pageableResult.getTotalPages()
+                pageableResult.getResult(),
+                pageableResult.getNumber(),
+                pageableResult.getSize(),
+                pageableResult.getTotalElements(),
+                pageableResult.getTotalPages()
         );
     }
 
-
     public static ErrorMessageBody newErrorMessageBody(ErrorMessages error) {
         ErrorMessageBody body = new ErrorMessageBody(error.getCode(), error.getErrorMessage());
+        return body;
+    }
+
+    public static ErrorMessageBody newErrorMessageBody(ErrorMessages error, Object details) {
+        ErrorMessageBody body = newErrorMessageBody(error);
+        body.setDetails(details);
         return body;
     }
 

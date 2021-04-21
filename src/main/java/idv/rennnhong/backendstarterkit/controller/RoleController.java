@@ -89,27 +89,32 @@ public class RoleController {
     @ApiOperation("修改角色資料")
     public ResponseEntity updateRole(@PathVariable("id") UUID id,
                                      @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
-        RoleDto roleDto = roleService.getById(id);
-        if (ObjectUtils.isEmpty(roleDto)) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
-        }
         RoleDto updatedRole = roleService.update(id, updateRoleRequestDto);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(updatedRole);
         return ResponseEntity.ok(responseBody);
     }
 
+//    @PutMapping("/{id}/permission")
+//    @ApiOperation("修改角色資料")
+//    public ResponseEntity updateRolePermission(@PathVariable("id") UUID id,
+//                                               @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
+//        RoleDto updatedRole = roleService.updateRolePermission(id, updateRoleRequestDto);
+//        ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(updatedRole);
+//        return ResponseEntity.ok(responseBody);
+//    }
+
 
     @DeleteMapping("/{id}")
     @ApiOperation("刪除角色資料")
     public ResponseEntity deleteRole(@PathVariable UUID id) {
-        if (!roleService.isExist(id)) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
-        }
+//        if (!roleService.isExist(id)) {
+//            return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
+//        }
 
-        if (roleService.isRoleReferenced(id)) {
-            //todo 若有使用者還在用該角色，拋出異常
-            return new ResponseEntity(ResponseBody.newSingleBody("該角色目前還有其他使用者引用"), HttpStatus.BAD_REQUEST);
-        }
+//        if (roleService.isRoleReferenced(id)) {
+//            //todo 若有使用者還在用該角色，拋出異常
+//            return new ResponseEntity(ResponseBody.newSingleBody("該角色目前還有其他使用者引用"), HttpStatus.BAD_REQUEST);
+//        }
 
         roleService.delete(id);
         return ResponseEntity.noContent().build();

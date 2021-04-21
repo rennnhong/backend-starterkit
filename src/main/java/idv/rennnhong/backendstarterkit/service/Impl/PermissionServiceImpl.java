@@ -8,11 +8,12 @@ import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
-import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
-import idv.rennnhong.backendstarterkit.repository.RoleRepository;
+import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
+import idv.rennnhong.backendstarterkit.exception.ExceptionType;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
+import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
+import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.query.PageableResultImpl;
@@ -22,11 +23,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static idv.rennnhong.backendstarterkit.exception.GroupType.PERMISSION;
 
 @Service
 public class PermissionServiceImpl implements PermissionService {
@@ -88,7 +88,11 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void delete(UUID id) {
-        permissionRepository.deleteById(id);
+        Optional<Permission> optionalPermission = permissionRepository.findById(id);
+        Permission permission = optionalPermission.orElseThrow(() ->
+                ExceptionFactory.newException(PERMISSION, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
+        permissionRepository.delete(permission);
     }
 
     @Override

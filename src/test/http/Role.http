@@ -19,7 +19,7 @@ Authorization: KangDa {{token}}
 }
 
 ### 修改角色資料ById
-PUT {{serverUrl}}/api/roles/c95cf9ca-76b5-490c-b57f-3872a1900aa1
+PUT {{serverUrl}}/api/roles/deefaf77-80ec-47b1-b7ff-0554d81ebeb8
 Content-Type: application/json
 Authorization: KangDa {{token}}
 
@@ -28,8 +28,25 @@ Authorization: KangDa {{token}}
   "code": "test02"
 }
 
+### 修改角色資料ById
+PUT {{serverUrl}}/api/roles/deefaf77-80ec-47b1-b7ff-0554d81ebeb8
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "name": "測試者",
+  "code": "test02",
+  "rolePermissions": [
+    {
+      "permissionId": "9ac34055-f736-4526-bc0d-c2ee16039cad",
+      "actionIds": ["54ac0af8-faae-439d-915d-e3f382b3e41a"]
+    }
+  ]
+}
+
+
 ### 刪除角色資料ById
-DELETE {{serverUrl}}/api/roles/c3530613-335e-4e37-a455-91029e088fb4
+DELETE {{serverUrl}}/api/roles/8c3e0363-6e9d-4cbf-8226-19b9e9a0c362
 Content-Type: application/json
 Authorization: KangDa {{token}}
 

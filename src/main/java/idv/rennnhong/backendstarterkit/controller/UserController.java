@@ -3,10 +3,9 @@ package idv.rennnhong.backendstarterkit.controller;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
-import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.UserService;
-import idv.rennnhong.backendstarterkit.web.utils.JwtTokenUtils;
 import idv.rennnhong.backendstarterkit.web.utils.MapValidationErrorService;
+import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.response.ResponseBody;
 import io.swagger.annotations.Api;
@@ -25,7 +24,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.UUID;
 
-import static idv.rennnhong.common.response.ErrorMessages.*;
+import static idv.rennnhong.common.response.ErrorMessages.INVALID_FIELDS_REQUEST;
 
 @RestController
 @RequestMapping("/api/users")
@@ -42,12 +41,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtTokenUtils jwtTokenUtils;
-
-    @Autowired
-    private PermissionService permissionService;
-
     @GetMapping
     @ApiOperation("取得使用者資料")
     public ResponseEntity getUsers(@RequestParam(defaultValue = "1") int pageNumber,
@@ -60,10 +53,6 @@ public class UserController {
     @GetMapping("/{id}")
     @ApiOperation("查詢使用者資料 By userId")
     public ResponseEntity<Object> getUserById(@PathVariable UUID id) {
-        if ("".equals(id)) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
-                    HttpStatus.BAD_REQUEST);
-        }
         return new ResponseEntity(userService.getById(id), HttpStatus.OK);
     }
 
@@ -72,9 +61,10 @@ public class UserController {
     @ApiOperation("查詢使用者資料 By Account")
     public ResponseEntity<Object> getUserByAccount(@RequestParam("account") String account) {
         if ("".equals(account)) {
-            return new ResponseEntity<Object>(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
+            return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
                     HttpStatus.BAD_REQUEST);
         }
+
         UserDto user = userService.getUserByAccount(account);
         ResponseBody<UserDto> responseBody = ResponseBody.newSingleBody(user);
         return new ResponseEntity(responseBody, HttpStatus.OK);
@@ -82,14 +72,21 @@ public class UserController {
 
     @PostMapping
     @ApiOperation("建立使用者資料")
-    public ResponseEntity<Object> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
-        if (!userService.isExistByAccount(createUserRequestDto.getAccount())) {
-            UserDto savedUserDto = userService.save(createUserRequestDto);
-            return new ResponseEntity(ResponseBody.newSingleBody(savedUserDto), HttpStatus.OK);
+    public ResponseEntity<Object> createUser(
+            @Valid @RequestBody CreateUserRequestDto createUserRequestDto,
+            BindingResult bindingResult) {
+
+        BindingResultWrapper bindingResultWrapper = new BindingResultWrapper(bindingResult);
+        if (bindingResultWrapper.hasErrors()) {
+            Object errorMap = bindingResultWrapper.asHashMap();
+            return new ResponseEntity(
+                    ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST, errorMap),
+                    HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(
-                ResponseBody.newErrorMessageBody(REQUEST_DUPLICATE_DATA),
-                HttpStatus.BAD_REQUEST);
+
+        UserDto savedUserDto = userService.save(createUserRequestDto);
+        return new ResponseEntity(ResponseBody.newSingleBody(savedUserDto), HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}")
@@ -104,10 +101,6 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        UserDto userDto = userService.getById(id);
-        if (userDto == null) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
-        }
         UserDto updatedUserDto = userService.update(id, updateUserRequestDto);
         return new ResponseEntity(updatedUserDto, HttpStatus.OK);
     }
@@ -120,12 +113,6 @@ public class UserController {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
                     HttpStatus.BAD_REQUEST);
         }
-
-        if (!userService.isExist(UUID.fromString(id))) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(COULD_NOT_DELETE_RECORD),
-                    HttpStatus.BAD_REQUEST);
-        }
-
         userService.delete(UUID.fromString(id));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
 

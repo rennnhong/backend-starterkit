@@ -6,6 +6,8 @@ import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionReq
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ActionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
+import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
+import idv.rennnhong.backendstarterkit.exception.ExceptionType;
 import idv.rennnhong.backendstarterkit.repository.ActionRepository;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.model.entity.Action;
@@ -15,10 +17,9 @@ import idv.rennnhong.common.query.PageableResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
+import static idv.rennnhong.backendstarterkit.exception.GroupType.PERMISSION;
 
 @Service
 public class ActionServiceImpl implements ActionService {
@@ -61,15 +62,23 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public ActionDto save(CreateActionRequestDto createActionRequestDto) {
+    public ActionDto save(UUID permissionId, CreateActionRequestDto createActionRequestDto) {
+        Optional<Permission> optionalPermission = permissionRepository.findById(permissionId);
+        Permission permission = optionalPermission.orElseThrow(() ->
+                ExceptionFactory.newException(PERMISSION, ExceptionType.ENTITY_NOT_FOUND, permissionId.toString())
+        );
         Action action = actionMapper.createEntity(createActionRequestDto);
+        action.setPermission(permission);
         Action savedAction = actionRepository.save(action);
         return actionMapper.toDto(savedAction);
     }
 
     @Override
     public ActionDto update(UUID id, UUID permissionId, UpdateActionRequestDto updateActionRequestDto) {
-        Action action = actionRepository.findById(id).get();
+        Optional<Action> optionalAction = actionRepository.findById(id);
+        Action action = optionalAction.orElseThrow(() ->
+                ExceptionFactory.newException(PERMISSION, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
         actionMapper.updateEntity(action, updateActionRequestDto);
         Action updatedAction = actionRepository.save(action);
         return actionMapper.toDto(updatedAction);
@@ -77,7 +86,11 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public void delete(UUID id) {
-        actionRepository.deleteById(id);
+        Optional<Action> optionalAction = actionRepository.findById(id);
+        Action action = optionalAction.orElseThrow(() ->
+                ExceptionFactory.newException(PERMISSION, ExceptionType.ENTITY_NOT_FOUND, id.toString())
+        );
+        actionRepository.delete(action);
     }
 
     @Override
