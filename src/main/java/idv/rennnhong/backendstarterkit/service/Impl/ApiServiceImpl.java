@@ -15,6 +15,7 @@ import idv.rennnhong.backendstarterkit.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ApiServiceImpl implements ApiService {
 
     final ApiRepository apiRepository;

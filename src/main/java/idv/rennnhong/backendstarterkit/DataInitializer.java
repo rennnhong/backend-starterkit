@@ -2,6 +2,7 @@ package idv.rennnhong.backendstarterkit;
 
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.model.entity.*;
 import idv.rennnhong.backendstarterkit.repository.*;
@@ -16,8 +17,9 @@ import javax.annotation.PostConstruct;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-//@Component
+@Component
 @Slf4j
 public class DataInitializer {
 
@@ -55,9 +57,9 @@ public class DataInitializer {
         Permission 目錄1 = new Permission("目錄1", null, null, 1, 1, null, 根目錄, null);
         Permission 目錄2 = new Permission("目錄2", null, null, 1, 1, null, 根目錄, null);
         Permission 目錄3 = new Permission("目錄3", null, null, 1, 1, null, 根目錄, null);
-        Permission 目錄1_1 = new Permission("目錄1_1", null, null, 1, 1, null, 目錄1, null);
-        Permission 目錄2_1 = new Permission("目錄2_1", null, null, 1, 1, null, 目錄2, null);
-        Permission 目錄3_1 = new Permission("目錄3_1", null, null, 1, 1, null, 目錄3, null);
+        Permission 目錄1_1 = new Permission("目錄1_1", null, "/users", 1, 1, null, 目錄1, null);
+        Permission 目錄2_1 = new Permission("目錄2_1", null, "/roles", 1, 1, null, 目錄2, null);
+        Permission 目錄3_1 = new Permission("目錄3_1", null, "/permissions", 1, 1, null, 目錄3, null);
 
         List<Permission> initPermissions = Lists.newArrayList(
                 根目錄,
@@ -69,18 +71,51 @@ public class DataInitializer {
                 目錄3_1
         );
 
-        String[] actionStr = new String[]{"新增", "修改", "刪除", "查詢"};
+        String[] actionStr = new String[]{"查詢", "新增", "修改", "刪除"};
 
-        for (Permission initPermission : initPermissions) {
-            Set<Action> collect = Arrays.stream(actionStr).map(str -> new Action(str, null, null, null, null, null))
+        Api apiUserGet = new Api("/api/users", "GET");
+        Api apiUserPost = new Api("/api/users", "POST");
+        Api apiUserPut = new Api("/api/users", "PUT");
+        Api apiUserDelete = new Api("/api/users", "DELETE");
+        Api apiRoleGet = new Api("/api/roles", "GET");
+        Api apiRolePost = new Api("/api/roles", "POST");
+        Api apiRolePut = new Api("/api/roles", "PUT");
+        Api apiRoleDelete = new Api("/api/roles", "DELETE");
+        Api apiPermissionGet = new Api("/api/permissions", "GET");
+        Api apiPermissionPost = new Api("/api/permissions", "POST");
+        Api apiPermissionPut = new Api("/api/permissions", "PUT");
+        Api apiPermissionDelete = new Api("/api/permissions", "DELETE");
+        List<Api> userApis = Lists.newArrayList(apiUserGet, apiUserPost, apiUserPut, apiUserDelete);
+        List<Api> roleApis = Lists.newArrayList(apiRoleGet, apiRolePost, apiRolePut, apiRoleDelete);
+        List<Api> permissionApis = Lists.newArrayList(apiPermissionGet, apiPermissionPost, apiPermissionPut, apiPermissionDelete);
+        apiRepository.saveAll(userApis);
+        apiRepository.saveAll(roleApis);
+        apiRepository.saveAll(permissionApis);
+        Map<String, List<Api>> apiMap = Maps.newHashMap();
+        apiMap.put("/users", userApis);
+        apiMap.put("/roles", roleApis);
+        apiMap.put("/permissions", permissionApis);
+        for (int i = 4; i < 7; i++) {
+            Permission initPermission = initPermissions.get(i);
+            List<Api> apis = apiMap.get(initPermission.getRoute());
+            Set<Action> collect = IntStream.range(0, actionStr.length)
+                    .mapToObj(index -> new Action(actionStr[index], null, null, null, null, apis.get(index)))
                     .collect(Collectors.toSet());
+
             initPermission.setActions(collect);
         }
+
+//        for (Permission initPermission : initPermissions) {
+//            Set<Action> collect = Arrays.stream(actionStr).map(str -> new Action(str, null, null, null, null, null))
+//                    .collect(Collectors.toSet());
+//            initPermission.setActions(collect);
+//        }
 
         permissionRepository.saveAll(initPermissions);
 
         for (Role initRole : initRoles) {
-            for (Permission initPermission : initPermissions) {
+            for (int i = 4; i < 7; i++) {
+                Permission initPermission = initPermissions.get(i);
                 for (Action action : initPermission.getActions()) {
                     if ("系統管理員".equals(initRole.getName())
                             && permissionService.isLastLayer(UUID.fromString(initPermission.getId().toString()))
@@ -124,10 +159,12 @@ public class DataInitializer {
         roleRepository.saveAll(initRoles);
 
         List<CreateUserRequestDto> initUsers = Lists.newArrayList();
+        //產生隨機使用者
         for (int i = 0; i < 10; i++) {
+
             CreateUserRequestDto user = new CreateUserRequestDto();
-            user.setUserName(fakerCN.name().fullName());
-            user.setAccount(fakerEN.name().firstName() + fakerEN.number().digits(5));
+            user.setUserName(i == 0 ? "RayLuo" : fakerCN.name().fullName());
+            user.setAccount(i == 0 ? "ray1938" : fakerEN.name().firstName() + fakerEN.number().digits(5));
             user.setPassword("123456");
             user.setBirthday(fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             user.setEmail(fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com");

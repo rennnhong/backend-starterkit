@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
 
     private String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(WebSecurityConfig.AUTHORIZATION_HEADER);
-        String tokenTitle = "RayLuo ";
+        String tokenTitle = "KangDa ";
         if (StringUtils.hasText(token) && token.startsWith(tokenTitle)) {
             return token.substring(7, token.length());
         }

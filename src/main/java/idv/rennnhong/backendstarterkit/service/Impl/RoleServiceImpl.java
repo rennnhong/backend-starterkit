@@ -1,11 +1,9 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
@@ -27,14 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static idv.rennnhong.backendstarterkit.exception.GroupType.*;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     final RoleRepository roleRepository;
