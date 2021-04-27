@@ -2,10 +2,13 @@ package idv.rennnhong.backendstarterkit;
 
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
+import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.model.entity.*;
 import idv.rennnhong.backendstarterkit.repository.*;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.RoleService;
+import idv.rennnhong.backendstarterkit.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +18,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 //@Component
+@Slf4j
 public class DataInitializer {
 
     @Autowired
     RoleService roleService;
     @Autowired
     PermissionService permissionService;
+    @Autowired
+    UserService userService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -98,25 +104,45 @@ public class DataInitializer {
             }
         }
 
-        List<User> initUsers = Lists.newArrayList();
+//        List<User> initUsers = Lists.newArrayList();
+//        for (int i = 0; i < 10; i++) {
+//            User user = new User(
+//                    fakerCN.name().fullName(),
+//                    fakerEN.name().firstName() + fakerEN.number().digits(5),
+//                    "123456",
+//                    null,
+//                    new HashSet(),
+//                    fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+//                    "男",
+//                    fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com",
+//                    fakerCN.phoneNumber().phoneNumber(),
+//                    fakerCN.country().capital());
+//            int random = (int) (Math.random() * 3);
+//            user.getRoles().add(initRoles.get(random));
+//            initUsers.add(user);
+//        }
+        roleRepository.saveAll(initRoles);
+
+        List<CreateUserRequestDto> initUsers = Lists.newArrayList();
         for (int i = 0; i < 10; i++) {
-            User user = new User(
-                    fakerCN.name().fullName(),
-                    fakerEN.name().firstName() + fakerEN.number().digits(5),
-                    fakerCN.crypto().md5(),
-                    null,
-                    new HashSet(),
-                    fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-                    "男",
-                    fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com",
-                    fakerCN.phoneNumber().phoneNumber(),
-                    fakerCN.country().capital());
+            CreateUserRequestDto user = new CreateUserRequestDto();
+            user.setUserName(fakerCN.name().fullName());
+            user.setAccount(fakerEN.name().firstName() + fakerEN.number().digits(5));
+            user.setPassword("123456");
+            user.setBirthday(fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            user.setEmail(fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com");
+            user.setGender("男");
+            user.setPhone(fakerCN.phoneNumber().phoneNumber());
+            user.setCity(fakerCN.country().capital());
+            user.setRoleIds(new ArrayList<>());
             int random = (int) (Math.random() * 3);
-            user.getRoles().add(initRoles.get(random));
+            user.getRoleIds().add(initRoles.get(random).getId().toString());
             initUsers.add(user);
         }
-        roleRepository.saveAll(initRoles);
-        userRepository.saveAll(initUsers);
+
+        for (CreateUserRequestDto initUser : initUsers) {
+            userService.save(initUser);
+        }
 
     }
 

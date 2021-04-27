@@ -27,7 +27,7 @@ Authorization: KangDa {{token}}
 }
 
 ### 查詢單一使用者(id)
-GET {{serverUrl}}/api/users/2a11bba2-c0d4-45fc-8d57-df60b6dab6ff
+GET {{serverUrl}}/api/users/2aa59534-cd4d-4a2c-9c09-72d8913af3fd
 Content-Type: application/json
 Authorization: KangDa {{token}}
 

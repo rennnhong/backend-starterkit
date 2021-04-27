@@ -1,17 +1,6 @@
-package idv.rennnhong.backendstarterkit.web.utils;
+package idv.rennnhong.backendstarterkit.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +10,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+/**
+ * @author weixiang
+ */
 @Component
 public class JwtTokenUtils {
 
@@ -36,7 +34,7 @@ public class JwtTokenUtils {
      */
     @PostConstruct
     public void init() {
-        this.secretKey = "KangDaInfo";
+        this.secretKey = "Rennnhong";
         int secondIn1day = 1000 * 60 * 60 * 24;
         this.tokenValidityInMilliseconds = secondIn1day * 2L;
         this.tokenValidityInMillisecondsForRememberMe = secondIn1day * 7L;

@@ -1,0 +1,12 @@
+
+### 登入
+POST {{serverUrl}}/api/auth/login
+Content-Type: application/json
+Authorization: KangDa {{token}}
+
+{
+  "username": "Mercedez69254",
+  "password": "123456"
+}
+
+###
