@@ -87,7 +87,7 @@ public class JwtUtils {
         }
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(StringUtils.split(jwtAuthorities,","))
+                Arrays.stream(jwtAuthorities.split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
