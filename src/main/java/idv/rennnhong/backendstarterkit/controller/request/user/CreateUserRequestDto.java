@@ -2,12 +2,14 @@ package idv.rennnhong.backendstarterkit.controller.request.user;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class CreateUserRequestDto {
 
+    @NotBlank
     private String userName;
 
     private String account;

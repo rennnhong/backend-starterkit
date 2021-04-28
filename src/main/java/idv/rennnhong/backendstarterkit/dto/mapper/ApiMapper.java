@@ -22,6 +22,8 @@ public interface ApiMapper {
 
     void updateEntity(@MappingTarget Api Api, UpdateApiRequestDto updateActionRequestDto);
 
+    Api toEntity(ApiDto apiDto);
+
     ApiDto toDto(Api entity);
 
     Collection<ApiDto> toDto(Collection<Api> entities);

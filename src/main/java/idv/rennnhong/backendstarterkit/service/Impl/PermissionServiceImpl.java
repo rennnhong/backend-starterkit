@@ -23,12 +23,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static idv.rennnhong.backendstarterkit.exception.GroupType.PERMISSION;
 
 @Service
+@Transactional
 public class PermissionServiceImpl implements PermissionService {
 
     final PermissionRepository permissionRepository;

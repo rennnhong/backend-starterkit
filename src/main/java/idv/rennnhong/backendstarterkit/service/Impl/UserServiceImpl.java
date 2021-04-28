@@ -2,6 +2,7 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
@@ -13,6 +14,7 @@ import idv.rennnhong.backendstarterkit.model.entity.User;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.repository.UserRepository;
+import idv.rennnhong.backendstarterkit.security.UserDetailsImpl;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.query.PageableResultImpl;
@@ -20,16 +22,22 @@ import idv.rennnhong.common.query.QueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static idv.rennnhong.backendstarterkit.exception.GroupType.USER;
 
 @Service
-class UserServiceImpl implements UserService {
+@Transactional
+class UserServiceImpl implements UserService, UserDetailsService {
 
     final UserRepository userRepository;
 
@@ -52,7 +60,7 @@ class UserServiceImpl implements UserService {
     public UserDto getUserByAccount(String account) {
         Optional<User> optionalUser = userRepository.findByAccount(account);
         User user = optionalUser.orElseThrow(() ->
-                ExceptionFactory.newExceptionWithId(USER, ExceptionType.ENTITY_NOT_FOUND,2, account)
+                ExceptionFactory.newExceptionWithId(USER, ExceptionType.ENTITY_NOT_FOUND, 2, account)
         );
         return userMapper.toDto(user);
     }
@@ -74,13 +82,16 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(CreateUserRequestDto dto) {
-        if(userRepository.existsByAccount(dto.getAccount()))
+        if (userRepository.existsByAccount(dto.getAccount()))
             throw ExceptionFactory.newException(USER, ExceptionType.DUPLICATE_ENTITY, dto.getAccount());
 
         User user = userMapper.createEntity(dto);
 
         //處理Roles
         if (!ObjectUtils.isEmpty(dto.getRoleIds())) setUserRoles(user, dto.getRoleIds());
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
@@ -104,6 +115,8 @@ class UserServiceImpl implements UserService {
     }
 
     private void setUserRoles(User user, List<String> roleIds) {
+        if(user.getRoles() == null) user.setRoles(Sets.newHashSet());
+
         List<UUID> uuidList = roleIds.stream()
                 .map(roleId -> UUID.fromString(roleId))
                 .collect(Collectors.toList());
@@ -158,4 +171,10 @@ class UserServiceImpl implements UserService {
         return userMapper.toDto(users);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByAccount(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+        return UserDetailsImpl.build(user);
+    }
 }

@@ -1,11 +1,9 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.role.RolePermissionDto;
 import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
@@ -27,14 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static idv.rennnhong.backendstarterkit.exception.GroupType.*;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     final RoleRepository roleRepository;
@@ -115,7 +114,7 @@ public class RoleServiceImpl implements RoleService {
         這邊Hibernate會自動用邏輯刪除的查詢方式查出users，delete=1
         就不會被查出來，所以不用擔心因使用者實際還存在資料庫而刪不掉role的問題
          */
-        if(role.getUsers().size() > 0)
+        if (role.getUsers().size() > 0)
             throw ExceptionFactory.newException(ROLE, ExceptionType.ENTITY_EXIST_RELATED, id.toString());
 
         roleRepository.deleteById(id);
@@ -191,6 +190,12 @@ public class RoleServiceImpl implements RoleService {
                 ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, userId.toString())
         );
         Set<Role> roles = user.getRoles();
+        return ImmutableSet.copyOf(roleMapper.toDto(roles));
+    }
+
+    @Override
+    public Set<RoleDto> getRoleByCodes(Set<String> code) {
+        Set<Role> roles = roleRepository.findAllByCodeIn(code);
         return ImmutableSet.copyOf(roleMapper.toDto(roles));
     }
 

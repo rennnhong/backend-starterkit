@@ -1,8 +1,5 @@
 package idv.rennnhong.backendstarterkit.exception;
 
-/**
- * Created by Arpit Khandelwal.
- */
 public enum ExceptionType {
     ENTITY_NOT_FOUND("not.found"),
     DUPLICATE_ENTITY("duplicate"),

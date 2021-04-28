@@ -1,17 +1,17 @@
 ### 取得所有頁面權限資料
 GET {{serverUrl}}/api/permissions?pageNumber=1&rowsPerPage=10
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 取得頁面權限資料ById
 GET {{serverUrl}}/api/permissions/{id}
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 新增頁面權限資料
 POST {{serverUrl}}/api/permissions
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "頁面一"
@@ -20,7 +20,7 @@ Authorization: KangDa {{token}}
 ### 修改頁面權限資料ById
 PUT {{serverUrl}}/api/permissions/{id}
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "頁面xxxxxxxx"
@@ -29,17 +29,17 @@ Authorization: KangDa {{token}}
 ### 刪除頁面權限資料ById
 DELETE {{serverUrl}}/api/permissions/{id}
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 取得頁面操作資料
 GET {{serverUrl}}/api/permissions/{id}/actions
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 新增頁面操作資料
 POST {{serverUrl}}/api/permissions/{permissionId/{actions}
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "猥瑣欲為"
@@ -48,7 +48,7 @@ Authorization: KangDa {{token}}
 ### 新增頁面操作資料
 PUT {{serverUrl}}/api/permissions/{permissionId/{actions}
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "為所欲為"

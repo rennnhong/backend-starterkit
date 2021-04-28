@@ -34,4 +34,6 @@ public interface RoleService {
 
 //    boolean isRoleReferenced(UUID id);
 
+    Set<RoleDto> getRoleByCodes(Set<String> code);
+
 }

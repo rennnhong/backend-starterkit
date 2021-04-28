@@ -4,7 +4,6 @@ import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequest
 import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.UserService;
-import idv.rennnhong.backendstarterkit.web.utils.MapValidationErrorService;
 import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.response.ResponseBody;
@@ -37,8 +36,6 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private MapValidationErrorService mapValidationErrorService;
-    @Autowired
     private UserService userService;
 
     @GetMapping
@@ -52,14 +49,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation("查詢使用者資料 By userId")
-    public ResponseEntity<Object> getUserById(@PathVariable UUID id) {
+    public ResponseEntity getUserById(@PathVariable UUID id) {
         return new ResponseEntity(userService.getById(id), HttpStatus.OK);
     }
 
 
     @GetMapping(params = {"account"})
     @ApiOperation("查詢使用者資料 By Account")
-    public ResponseEntity<Object> getUserByAccount(@RequestParam("account") String account) {
+    public ResponseEntity getUserByAccount(@RequestParam("account") String account) {
         if ("".equals(account)) {
             return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
                     HttpStatus.BAD_REQUEST);
@@ -72,7 +69,7 @@ public class UserController {
 
     @PostMapping
     @ApiOperation("建立使用者資料")
-    public ResponseEntity<Object> createUser(
+    public ResponseEntity createUser(
             @Valid @RequestBody CreateUserRequestDto createUserRequestDto,
             BindingResult bindingResult) {
 
@@ -91,13 +88,15 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ApiOperation("更新使用者資料")
-    public ResponseEntity<Object> updateUser(
+    public ResponseEntity updateUser(
             @PathVariable("id") UUID id,
             @Valid @RequestBody UpdateUserRequestDto updateUserRequestDto,
             BindingResult bindingResult) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
-        if (errorMap != null) {
-            return new ResponseEntity(ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST),
+        BindingResultWrapper bindingResultWrapper = new BindingResultWrapper(bindingResult);
+        if (bindingResultWrapper.hasErrors()) {
+            Object errorMap = bindingResultWrapper.asHashMap();
+            return new ResponseEntity(
+                    ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST, errorMap),
                     HttpStatus.BAD_REQUEST);
         }
 

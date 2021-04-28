@@ -48,7 +48,7 @@ public class Role extends AuditableEntity<String> {
     @Column(nullable = false)
     String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String code;
 
     @Column

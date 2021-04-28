@@ -17,11 +17,13 @@ import idv.rennnhong.common.query.PageableResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 import static idv.rennnhong.backendstarterkit.exception.GroupType.PERMISSION;
 
 @Service
+@Transactional
 public class ActionServiceImpl implements ActionService {
 
     final ActionRepository actionRepository;

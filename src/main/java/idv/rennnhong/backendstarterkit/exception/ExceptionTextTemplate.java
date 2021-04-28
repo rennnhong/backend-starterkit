@@ -5,9 +5,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by Arpit Khandelwal.
- */
 @Component
 @PropertySource("classpath:exception-messages.properties")
 class ExceptionTextTemplate {

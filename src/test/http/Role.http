@@ -1,17 +1,17 @@
 ### 取得所有角色資料
 GET {{serverUrl}}/api/roles?pageNumber=1&rowsPerPage=10
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 取得角色資料ById
 GET {{serverUrl}}/api/roles/9624d7cb-d318-43f4-bc9f-f76556242ac0
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 新增角色資料
 POST {{serverUrl}}/api/roles
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "測試者",
@@ -21,7 +21,7 @@ Authorization: KangDa {{token}}
 ### 修改角色資料ById
 PUT {{serverUrl}}/api/roles/deefaf77-80ec-47b1-b7ff-0554d81ebeb8
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "測試者",
@@ -31,7 +31,7 @@ Authorization: KangDa {{token}}
 ### 修改角色資料ById
 PUT {{serverUrl}}/api/roles/deefaf77-80ec-47b1-b7ff-0554d81ebeb8
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "name": "測試者",
@@ -48,9 +48,11 @@ Authorization: KangDa {{token}}
 ### 刪除角色資料ById
 DELETE {{serverUrl}}/api/roles/8c3e0363-6e9d-4cbf-8226-19b9e9a0c362
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 取得所有頁面權限角色資料
 GET {{serverUrl}}/api/roles/auths
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
+
+###

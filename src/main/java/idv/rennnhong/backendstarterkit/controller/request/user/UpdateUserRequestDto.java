@@ -12,8 +12,6 @@ public class UpdateUserRequestDto {
 
     private String account;
 
-    private String password;
-
     private LocalDate birthday;
 
     private String gender;
