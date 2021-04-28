@@ -32,7 +32,7 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql="update sys_user set deleted = 1 where id = ?")
+@SQLDelete(sql = "update sys_user set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 public class User extends AuditableEntity<String> {
 
@@ -55,10 +55,10 @@ public class User extends AuditableEntity<String> {
     @Column
     private String userName;
 
-    @Column(updatable = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private String account;
 
-    @Column
+    @Column(nullable = false)
     @JsonIgnore
     private String password;
 

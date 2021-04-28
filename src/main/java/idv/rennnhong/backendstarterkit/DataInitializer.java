@@ -48,9 +48,9 @@ public class DataInitializer {
     public void init() {
 
         List<Role> initRoles = Lists.newArrayList(
-                new Role("系統管理員", "admin", null, new HashSet<>()),
-                new Role("作業管理員", "manager", null, new HashSet<>()),
-                new Role("一般使用者", "user", null, new HashSet<>())
+                new Role("系統管理員", "ROLE_ADMIN", null, new HashSet<>()),
+                new Role("作業管理員", "ROLE_MANAGER", null, new HashSet<>()),
+                new Role("一般使用者", "ROLE_USER", null, new HashSet<>())
         );
 
         Permission 根目錄 = new Permission("根目錄", null, null, 1, 1, null, null, null);

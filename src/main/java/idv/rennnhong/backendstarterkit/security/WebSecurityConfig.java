@@ -3,6 +3,7 @@ package idv.rennnhong.backendstarterkit.security;
 import idv.rennnhong.backendstarterkit.security.jwt.AuthEntryPoint;
 import idv.rennnhong.backendstarterkit.security.jwt.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +26,6 @@ import org.springframework.web.filter.GenericFilterBean;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
-//    public static final String AUTHORIZATION_TOKEN = "access_token";
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -79,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public GenericFilterBean jwtAuthenticationTokenFilter() {
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
     }
 
@@ -98,5 +97,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 }

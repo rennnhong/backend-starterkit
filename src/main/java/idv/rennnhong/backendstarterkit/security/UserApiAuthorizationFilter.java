@@ -1,16 +1,14 @@
 package idv.rennnhong.backendstarterkit.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
+import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.service.ApiService;
+import idv.rennnhong.backendstarterkit.service.RoleService;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.common.response.ErrorMessageBody;
 import idv.rennnhong.common.response.ErrorMessages;
 import idv.rennnhong.common.response.ResponseBody;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
@@ -26,13 +24,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UserApiAuthorizationFilter extends GenericFilterBean {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RoleService roleService;
 
     @Autowired
     ApiService apiService;
@@ -63,9 +67,11 @@ public class UserApiAuthorizationFilter extends GenericFilterBean {
         } else if (requestUrl.startsWith(this.API_PREFIX)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User principal = (User) authentication.getPrincipal();
-            List<UUID> roleIds = principal.getAuthorities().stream()
-                    .map(grantedAuthority -> UUID.fromString(grantedAuthority.getAuthority()))
-                    .collect(Collectors.toList());
+            Set<String> roleCodes = principal.getAuthorities().stream()
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+                    .collect(Collectors.toSet());
+            Set<RoleDto> roleByCodes = roleService.getRoleByCodes(roleCodes);
+            List<UUID> roleIds = roleByCodes.stream().map(roleDto -> roleDto.getId()).collect(Collectors.toList());
             String path = requestUrl.replace(this.API_PREFIX, "");
             HttpMethod httpMethod = getHttpMethod(request);
             ApiDto requestApi = apiService.getRestFulApi(path, httpMethod);
