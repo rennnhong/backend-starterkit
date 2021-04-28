@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,34 +19,51 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * @author weixiang
- */
-public class JwtAuthenticationTokenFilter extends GenericFilterBean {
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private final Logger log = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
     @Autowired
     private JwtTokenUtils tokenProvider;
 
+//    @Override
+//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+//                         FilterChain filterChain) throws IOException, ServletException {
+//        try {
+//            HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
+//            String jwt = resolveToken(httpReq);
+//            boolean validateTokenState = this.tokenProvider.validateToken(jwt);
+//            if (StringUtils.hasText(jwt) && validateTokenState) {
+//                Authentication authentication = this.tokenProvider.getAuthentication(jwt);
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//            }
+//            filterChain.doFilter(servletRequest, servletResponse);
+//        }
+//        catch (ExpiredJwtException e) {
+//            log.info("Security exception for user {} - {}", e.getClaims().getSubject(),
+//                e.getMessage());
+//            log.trace("Security exception trace: {}", e);
+//            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//        }
+//    }
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
-            String jwt = resolveToken(httpReq);
+//            HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
+            String jwt = resolveToken(request);
             boolean validateTokenState = this.tokenProvider.validateToken(jwt);
             if (StringUtils.hasText(jwt) && validateTokenState) {
                 Authentication authentication = this.tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            filterChain.doFilter(servletRequest, servletResponse);
+            filterChain.doFilter(request, response);
         }
         catch (ExpiredJwtException e) {
             log.info("Security exception for user {} - {}", e.getClaims().getSubject(),
-                e.getMessage());
+                    e.getMessage());
             log.trace("Security exception trace: {}", e);
-            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 

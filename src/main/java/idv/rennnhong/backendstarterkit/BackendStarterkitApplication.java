@@ -12,9 +12,7 @@ import javax.persistence.EntityManager;
 
 @SpringBootApplication(
         exclude = {
-                RedisAutoConfiguration.class,
-                SecurityAutoConfiguration.class,
-                ManagementWebSecurityAutoConfiguration.class}
+                RedisAutoConfiguration.class}
 )
 public class BackendStarterkitApplication {
 

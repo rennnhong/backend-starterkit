@@ -3,11 +3,14 @@ package idv.rennnhong.backendstarterkit.security.jwt;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -16,11 +19,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-/**
- * @author weixiang
- */
 @Component
 public class JwtTokenUtils {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String username = "";
@@ -80,9 +83,9 @@ public class JwtTokenUtils {
      */
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser()
-            .setSigningKey(secretKey)
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
 
         String jwtAuthentication = claims.get(AUTHORITIES_KEY).toString();
         boolean isTokenHaveAuthData = "".equals(jwtAuthentication);
@@ -91,9 +94,9 @@ public class JwtTokenUtils {
         }
 
         Collection<? extends GrantedAuthority> authorities =
-            Arrays.stream(jwtAuthentication.split((",")))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                Arrays.stream(jwtAuthentication.split((",")))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);

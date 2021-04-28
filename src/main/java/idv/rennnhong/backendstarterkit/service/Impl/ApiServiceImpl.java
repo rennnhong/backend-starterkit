@@ -1,6 +1,7 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import idv.rennnhong.backendstarterkit.controller.request.api.CreateApiRequestDto;
 import idv.rennnhong.backendstarterkit.controller.request.api.UpdateApiRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
@@ -13,13 +14,11 @@ import idv.rennnhong.backendstarterkit.model.entity.Role;
 import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
 import idv.rennnhong.backendstarterkit.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,17 +42,17 @@ public class ApiServiceImpl implements ApiService {
         this.apiMapper = apiMapper;
     }
 
-    @Override
-    public List<ApiDto> getAllApiByRole(UUID roleId, String url, String httpMethod) {
-        Role roleEntity = roleRepository.findById(roleId).get();
-        Set<RolePermission> rolePermissions = roleEntity.getRolePermissions();
-
-//        List<Api> apiList = rolePermissions.stream()
-//            .map(rolePermission -> rolePermission.getAction().getApi())
-//            .filter(item -> url.matches(item.getUrl() + "/.*"))
-//            .collect(Collectors.toList());
-        return ImmutableList.copyOf(apiMapper.toDto(getApiList(rolePermissions, url)));
-    }
+//    @Override
+//    public List<ApiDto> getAllApiByRole(UUID roleId, String url, String httpMethod) {
+//        Role roleEntity = roleRepository.findById(roleId).get();
+//        Set<RolePermission> rolePermissions = roleEntity.getRolePermissions();
+//
+////        List<Api> apiList = rolePermissions.stream()
+////            .map(rolePermission -> rolePermission.getAction().getApi())
+////            .filter(item -> url.matches(item.getUrl() + "/.*"))
+////            .collect(Collectors.toList());
+//        return ImmutableList.copyOf(apiMapper.toDto(getApiList(rolePermissions, url)));
+//    }
 
     @Override
     public Collection<ApiDto> getAll() {
@@ -64,6 +63,16 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public ApiDto getById(UUID id) {
         Api api = apiRepository.findById(id).get();
+        return apiMapper.toDto(api);
+    }
+
+    @Override
+    public ApiDto getRestFulApi(String url, HttpMethod httpMethod) {
+        //todo *處理特殊路徑
+        String prefix = "/api";
+        String apiUrl = prefix + url;
+        Optional<Api> optionalApi = apiRepository.findByUrlAndHttpMethod(apiUrl, httpMethod.name());
+        Api api = optionalApi.get();
         return apiMapper.toDto(api);
     }
 
@@ -92,35 +101,33 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public List<ApiDto> getAllApiByRoles(List<UUID> roleIds, String url, String httpMethod) {
+    public boolean isAccessibleByRoles(List<UUID> roleIds, ApiDto apiDto) {
+        Api api = apiMapper.toEntity(apiDto);
+        Set<Api> apiSet = getAllApiByRoles(roleIds);
+        return apiSet.contains(api);
+    }
+
+
+    private Set<Api> getAllApiByRoles(List<UUID> roleIds) {
 
         List<Role> roleEntities = roleRepository.findAllByIdIn(roleIds);
 
         List<Set<RolePermission>> collect = roleEntities.stream().map(roleEntity -> roleEntity.getRolePermissions())
                 .collect(Collectors.toList());
 
-        List<Api> roleApiList = collect.stream()
-                .map(rolePermissions -> getApiList(rolePermissions, url))
-                .reduce((resultList, list) -> {
-                    resultList.addAll(list);
-                    return resultList;
-                }).get();
+        Set<Api> accessibleApi = Sets.newHashSet();
+        for (Set<RolePermission> rolePermissions : collect) {
+            Set<Api> apiSet = rolePermissions.stream().map(rolePermission -> rolePermission.getAction().getApi()).collect(Collectors.toSet());
+            accessibleApi.addAll(apiSet);
+        }
 
-//        List<List<ApiDTO>> roleApiList = roles
-//            .stream()
-//            .map(role -> getAllApiByRole(role, url, httpMethod))
-//            .collect(Collectors.toList());
-
-//        roleApiList
-//            .stream()
-//            .forEach(apis -> apiList.addAll(apis));
-        return ImmutableList.copyOf(apiMapper.toDto(roleApiList));
+        return accessibleApi;
     }
 
-    private List<Api> getApiList(Set<RolePermission> rolePermissions, String url) {
-        return rolePermissions.stream()
-                .map(rolePermission -> rolePermission.getAction().getApi())
-                .filter(item -> url.matches(item.getUrl() + "/.*"))
-                .collect(Collectors.toList());
-    }
+//    private List<Api> getApiList(Set<RolePermission> rolePermissions, String url) {
+//        return rolePermissions.stream()
+//                .map(rolePermission -> rolePermission.getAction().getApi())
+//                .filter(item -> url.matches(item.getUrl() + "/.*"))
+//                .collect(Collectors.toList());
+//    }
 }

@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(userAuthentication(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(userApiAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -89,8 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public GenericFilterBean userAuthentication() {
-        return new UserApiAuthenticationFilter(API_AUTH, API_PREFIX);
+    public GenericFilterBean userApiAuthorizationFilter() {
+        return new UserApiAuthorizationFilter(API_AUTH, API_PREFIX);
     }
 
     @Bean

@@ -10,7 +10,8 @@ Authorization: KangDa {{token}}
 
 {
   "userName": "昱銘小老弟",
-  "account": "YumiLoudDid"
+  "account": "YumiLoudDid",
+  "password": "123456"
 }
 
 ### 新增使用者(有角色)

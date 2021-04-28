@@ -159,7 +159,7 @@ public class DataInitializer {
         roleRepository.saveAll(initRoles);
 
         List<CreateUserRequestDto> initUsers = Lists.newArrayList();
-        //產生隨機使用者
+        //產生隨機使用者，第0個為固定的資料
         for (int i = 0; i < 10; i++) {
 
             CreateUserRequestDto user = new CreateUserRequestDto();
@@ -173,7 +173,9 @@ public class DataInitializer {
             user.setCity(fakerCN.country().capital());
             user.setRoleIds(new ArrayList<>());
             int random = (int) (Math.random() * 3);
-            user.getRoleIds().add(initRoles.get(random).getId().toString());
+            user.getRoleIds().add(
+                    i == 0 ? initRoles.get(2).getId().toString() : initRoles.get(random).getId().toString()
+            );
             initUsers.add(user);
         }
 
