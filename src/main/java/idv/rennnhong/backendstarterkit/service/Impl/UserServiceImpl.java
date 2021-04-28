@@ -91,7 +91,6 @@ class UserServiceImpl implements UserService, UserDetailsService {
         if (!ObjectUtils.isEmpty(dto.getRoleIds())) setUserRoles(user, dto.getRoleIds());
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println("@"+bCryptPasswordEncoder.encode(user.getPassword()));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);

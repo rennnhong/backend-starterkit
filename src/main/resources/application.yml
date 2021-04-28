@@ -8,7 +8,7 @@ spring:
     name: "Rennnhong-Backend-StarterKit"
   datasource:
     #    url: jdbc:h2:mem:testdb
-    url: jdbc:sqlserver://127.0.0.1;databaseName=tdjw_test_jpa
+    url: jdbc:sqlserver://127.0.0.1;databaseName=backend
     #    driver-class-name: org.h2.Driver
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     username: rayluo
@@ -24,9 +24,8 @@ spring:
     #    database: H2
     properties:
       hibernate:
-    #        use_nationalized_character_data: true # 設定 Database--這不知道是殺小，加的話會報「不支持從 varchar 到 NCHAR 的轉換」的錯誤
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   security:
     user:
       name: admin
@@ -34,6 +33,6 @@ spring:
 logging:
   level:
     root: warn
-    com.kangdainfo: debug
+    com.Bearerinfo: debug
   file:
     name: ./target/logs/${spring.application.name}

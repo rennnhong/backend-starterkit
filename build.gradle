@@ -32,8 +32,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-//    implementation "com.querydsl:querydsl-core:4.3.1"
-//    implementation "com.querydsl:querydsl-jpa:4.3.1"
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'de.codecentric:spring-boot-admin-starter-client:2.1.1'
     compileOnly 'org.projectlombok:lombok'
