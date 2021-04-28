@@ -75,10 +75,10 @@ public class PermissionController {
                                            @RequestBody UpdatePermissionRequestDto updatePermissionRequestDto) {
         PermissionDto updatedPermission = permissionService.update(id, updatePermissionRequestDto);
 //        if (ObjectUtils.isEmpty(updatedPermission)) {
-//            return new ResponseEntity<Object>(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
+//            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
 //        }
         ResponseBody<PermissionDto> responseBody = ResponseBody.newSingleBody(updatedPermission);
-        return new ResponseEntity<Object>(responseBody, HttpStatus.OK);
+        return new ResponseEntity(responseBody, HttpStatus.OK);
     }
 
 

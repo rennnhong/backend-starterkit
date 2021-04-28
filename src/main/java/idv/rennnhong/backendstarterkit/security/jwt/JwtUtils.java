@@ -3,15 +3,13 @@ package idv.rennnhong.backendstarterkit.security.jwt;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -20,14 +18,11 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenUtils {
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+public class JwtUtils {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String username = "";
-    private final Logger log = LoggerFactory.getLogger(JwtTokenUtils.class);
+    private final Logger log = LoggerFactory.getLogger(JwtUtils.class);
     private String secretKey;
     private long tokenValidityInMilliseconds;
     private long tokenValidityInMillisecondsForRememberMe;
@@ -55,24 +50,23 @@ public class JwtTokenUtils {
      */
     public String createToken(Authentication authentication, Boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(","));
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
             validity = new Date(now + this.tokenValidityInMilliseconds);
-        }
-        else {
+        } else {
             validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
         }
 
         return Jwts.builder()
-            .setSubject(authentication.getName())
-            .claim(AUTHORITIES_KEY, authorities)
-            .setExpiration(validity)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
-            .compact();
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
     }
 
     /**
@@ -87,14 +81,13 @@ public class JwtTokenUtils {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String jwtAuthentication = claims.get(AUTHORITIES_KEY).toString();
-        boolean isTokenHaveAuthData = "".equals(jwtAuthentication);
-        if (isTokenHaveAuthData) {
+        String jwtAuthorities = claims.get(AUTHORITIES_KEY).toString();
+        if (!StringUtils.hasLength(jwtAuthorities)) {
             return null;
         }
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(jwtAuthentication.split((",")))
+                Arrays.stream(StringUtils.split(jwtAuthorities,","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
@@ -113,24 +106,19 @@ public class JwtTokenUtils {
             try {
                 Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
                 return true;
-            }
-            catch (SignatureException e) {
+            } catch (SignatureException e) {
                 log.debug("Invalid JWT signature.");
                 log.trace("Invalid JWT signature trace: {}", e);
-            }
-            catch (MalformedJwtException e) {
+            } catch (MalformedJwtException e) {
                 log.debug("Invalid JWT token.");
                 log.trace("Invalid JWT token trace: {}", e);
-            }
-            catch (ExpiredJwtException e) {
+            } catch (ExpiredJwtException e) {
                 log.debug("Expired JWT token.");
                 log.trace("Expired JWT token trace: {}", e);
-            }
-            catch (UnsupportedJwtException e) {
+            } catch (UnsupportedJwtException e) {
                 log.debug("Unsupported JWT token.");
                 log.trace("Unsupported JWT token trace: {}", e);
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 log.debug("JWT token compact of handler are invalid.");
                 log.trace("JWT token compact of handler are invalid trace: {}", e);
             }

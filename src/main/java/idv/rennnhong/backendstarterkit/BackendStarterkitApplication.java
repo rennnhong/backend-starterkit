@@ -10,10 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import javax.persistence.EntityManager;
 
-@SpringBootApplication(
-        exclude = {
-                RedisAutoConfiguration.class}
-)
+@SpringBootApplication
 public class BackendStarterkitApplication {
 
     public static void main(String[] args) {

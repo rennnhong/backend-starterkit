@@ -132,7 +132,7 @@ public class RoleController {
 //        Set<RoleDto> roles = roleService.getRolesByUserId(UUID.fromString(userId));
 //        Collection<PermissionDto> permissions = permissionService.getPermissionsByRoles(roles);
 //        ResponseBody<Collection<PermissionDto>> responseBody = ResponseBody.newCollectionBody(permissions);
-//        return new ResponseEntity<Object>(responseBody, HttpStatus.OK);
+//        return new ResponseEntity(responseBody, HttpStatus.OK);
 //    }
 
 

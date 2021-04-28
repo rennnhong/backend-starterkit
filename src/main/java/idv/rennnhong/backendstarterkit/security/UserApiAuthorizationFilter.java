@@ -1,10 +1,15 @@
 package idv.rennnhong.backendstarterkit.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.ApiService;
 import idv.rennnhong.backendstarterkit.service.UserService;
+import idv.rennnhong.common.response.ErrorMessageBody;
 import idv.rennnhong.common.response.ErrorMessages;
+import idv.rennnhong.common.response.ResponseBody;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -21,10 +26,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserApiAuthorizationFilter extends GenericFilterBean {
@@ -38,6 +40,7 @@ public class UserApiAuthorizationFilter extends GenericFilterBean {
     String API_PREFIX = "";
     Boolean API_AUTH = false;
 
+    //若無法使用PUT、DELETE，用此header替代
     private static final String X_HTTP_METHOD_OVERRIDE_HEADER = "X-HTTP-Method-Override";
 
     public UserApiAuthorizationFilter(Boolean apiAuth, String api_prefix) {
@@ -46,9 +49,11 @@ public class UserApiAuthorizationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+    public void doFilter(ServletRequest servletRequest,
+                         ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         String requestUrl = request.getRequestURI();
 
         if (!this.API_AUTH) {
@@ -57,22 +62,20 @@ public class UserApiAuthorizationFilter extends GenericFilterBean {
             filterChain.doFilter(servletRequest, servletResponse);
         } else if (requestUrl.startsWith(this.API_PREFIX)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User principal =(User)authentication.getPrincipal();
+            User principal = (User) authentication.getPrincipal();
             List<UUID> roleIds = principal.getAuthorities().stream()
                     .map(grantedAuthority -> UUID.fromString(grantedAuthority.getAuthority()))
                     .collect(Collectors.toList());
-//            UserDto user = userService.getUserByAccount(authentication.getName());
             String path = requestUrl.replace(this.API_PREFIX, "");
             HttpMethod httpMethod = getHttpMethod(request);
-//            List<UUID> roleIds = user.getRoles().stream().map(roleId -> UUID.fromString(roleId)).collect(Collectors.toList());
             ApiDto requestApi = apiService.getRestFulApi(path, httpMethod);
             boolean isAccessible = apiService.isAccessibleByRoles(roleIds, requestApi);
             if (!isAccessible) {
-                HashMap hashMap = new HashMap();
-                hashMap.put("ErrorCode", ErrorMessages.FORBIDDEN_API_NO_AUTH.getCode());
-                hashMap.put("ErrorMessage", ErrorMessages.FORBIDDEN_API_NO_AUTH.getErrorMessage());
-                ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_FORBIDDEN);
-                servletResponse.getWriter().write(String.valueOf(new JSONObject(hashMap)));
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                ErrorMessageBody errorMessageBody = ResponseBody.newErrorMessageBody(ErrorMessages.FORBIDDEN_API_NO_AUTH);
+                ObjectMapper om = new ObjectMapper();
+                String message = om.writeValueAsString(errorMessageBody);
+                servletResponse.getWriter().write(message);
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
             }

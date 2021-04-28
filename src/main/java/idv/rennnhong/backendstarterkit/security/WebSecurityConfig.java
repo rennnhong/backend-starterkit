@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
-    public static final String AUTHORIZATION_TOKEN = "access_token";
+//    public static final String AUTHORIZATION_TOKEN = "access_token";
 
     @Autowired
     UserDetailsService userDetailsService;

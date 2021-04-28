@@ -1,15 +1,15 @@
 ### 查詢多個使用者
 GET {{serverUrl}}/api/users
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 新增使用者
 POST {{serverUrl}}/api/users
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
-  "userName": "昱銘小老弟",
+  "userName": "仲基小老弟",
   "account": "YumiLoudDid",
   "password": "123456"
 }
@@ -17,10 +17,10 @@ Authorization: KangDa {{token}}
 ### 新增使用者(有角色)
 POST {{serverUrl}}/api/users
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
-  "userName": "昱銘小老弟",
+  "userName": "仲基小老弟",
   "account": "YumiLoudDid2",
   "roles": [
     "0b9aa610-936b-422e-960e-2bef02da0fe7"
@@ -30,21 +30,21 @@ Authorization: KangDa {{token}}
 ### 查詢單一使用者(id)
 GET {{serverUrl}}/api/users/2aa59534-cd4d-4a2c-9c09-72d8913af3fd
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 查詢單一使用者(account)
 GET {{serverUrl}}/api/users?account=Miquel23270
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ### 更新使用者(不設role，模擬將使用者的role全部取消)
 PUT {{serverUrl}}/api/users/4d49364d-08ec-40bb-884c-49aff4f6c697
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "account": "YumiLoudDid",
-  "userName": "昱銘big弟",
+  "userName": "仲基big弟",
   "city": "Kaohsiung",
   "email": "yumi@kdinfo.com",
   "gender": "男",
@@ -54,11 +54,11 @@ Authorization: KangDa {{token}}
 ### 更新使用者
 PUT {{serverUrl}}/api/users/0edd9526-6dab-49ac-bda7-1b862d58c0af
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 {
   "account": "YumiLoudDid",
-  "userName": "昱銘big弟",
+  "userName": "仲基big弟",
   "city": "Kaohsiung",
   "email": "yumi@kdinfo.com",
   "gender": "男",
@@ -72,6 +72,6 @@ Authorization: KangDa {{token}}
 ### 刪除使用者個人資料
 DELETE {{serverUrl}}/api/users/ea190a6d-c90d-47ff-9928-c4ce2c602379
 Content-Type: application/json
-Authorization: KangDa {{token}}
+Authorization: Bearer {{token}}
 
 ###
