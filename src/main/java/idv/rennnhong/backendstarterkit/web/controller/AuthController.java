@@ -2,10 +2,10 @@ package idv.rennnhong.backendstarterkit.web.controller;
 
 
 import com.google.common.collect.Maps;
-import idv.rennnhong.backendstarterkit.web.controller.request.login.LoginRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.login.LoginRequest;
 import idv.rennnhong.backendstarterkit.security.WebSecurityConfig;
 import idv.rennnhong.backendstarterkit.security.jwt.JwtUtils;
-import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;
+import idv.rennnhong.common.utils.BindingResultHelper;
 import idv.rennnhong.common.response.ResponseBody;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +42,11 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiOperation("使用者登入")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
                                    HttpServletResponse httpServletResponse,
                                    BindingResult bindingResult) {
-        BindingResultWrapper bindingResultWrapper = new BindingResultWrapper(bindingResult);
-        if (bindingResultWrapper.hasErrors()) {
-            Object errorMap = bindingResultWrapper.asHashMap();
+        if (bindingResult.hasErrors()) {
+            Object errorMap = BindingResultHelper.toHashMap(bindingResult);
             return new ResponseEntity(
                     ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST, errorMap),
                     HttpStatus.BAD_REQUEST);
@@ -55,7 +54,7 @@ public class AuthController {
 
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    loginRequestDto.getUsername(), loginRequestDto.getPassword());
+                    loginRequest.getUsername(), loginRequest.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtUtils.createToken(authentication, false);

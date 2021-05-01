@@ -2,16 +2,15 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.dto.PermissionDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;
-import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.mapper.PermissionMapper;
+import idv.rennnhong.backendstarterkit.service.mapper.RoleMapper;
 import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
 import idv.rennnhong.backendstarterkit.exception.ExceptionType;
-import idv.rennnhong.backendstarterkit.model.entity.Permission;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
+import idv.rennnhong.backendstarterkit.entity.Permission;
+import idv.rennnhong.backendstarterkit.entity.Role;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
@@ -71,10 +70,10 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public PermissionDto save(CreatePermissionRequestDto createPermissionRequestDto) {
-        Permission entity = permissionMapper.createEntity(createPermissionRequestDto);
+    public PermissionDto save(PermissionDto permissionDto) {
+        Permission entity = permissionMapper.createEntity(permissionDto);
 
-        Permission parent = permissionRepository.findById(createPermissionRequestDto.getParentId()).get();
+        Permission parent = permissionRepository.findById(permissionDto.getParentId()).get();
         entity.setParent(parent);
 
         permissionRepository.save(entity);
@@ -82,9 +81,9 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public PermissionDto update(UUID id, UpdatePermissionRequestDto updatePermissionRequestDto) {
+    public PermissionDto update(UUID id, PermissionEditDto permissionEditDto) {
         Permission permission = permissionRepository.findById(id).get();
-        permissionMapper.updateEntity(permission, updatePermissionRequestDto);
+        permissionMapper.updateEntity(permission, permissionEditDto);
         return permissionMapper.toDto(permission);
     }
 

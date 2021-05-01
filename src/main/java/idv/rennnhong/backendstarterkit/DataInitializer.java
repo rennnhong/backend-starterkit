@@ -3,8 +3,8 @@ package idv.rennnhong.backendstarterkit;
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.model.entity.*;
+import idv.rennnhong.backendstarterkit.service.dto.UserDto;
+import idv.rennnhong.backendstarterkit.entity.*;
 import idv.rennnhong.backendstarterkit.repository.*;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.RoleService;
@@ -105,12 +105,6 @@ public class DataInitializer {
             initPermission.setActions(collect);
         }
 
-//        for (Permission initPermission : initPermissions) {
-//            Set<Action> collect = Arrays.stream(actionStr).map(str -> new Action(str, null, null, null, null, null))
-//                    .collect(Collectors.toSet());
-//            initPermission.setActions(collect);
-//        }
-
         permissionRepository.saveAll(initPermissions);
 
         for (Role initRole : initRoles) {
@@ -139,30 +133,13 @@ public class DataInitializer {
             }
         }
 
-//        List<User> initUsers = Lists.newArrayList();
-//        for (int i = 0; i < 10; i++) {
-//            User user = new User(
-//                    fakerCN.name().fullName(),
-//                    fakerEN.name().firstName() + fakerEN.number().digits(5),
-//                    "123456",
-//                    null,
-//                    new HashSet(),
-//                    fakerCN.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-//                    "男",
-//                    fakerEN.name().firstName() + fakerEN.number().digits(5) + "@gmail.com",
-//                    fakerCN.phoneNumber().phoneNumber(),
-//                    fakerCN.country().capital());
-//            int random = (int) (Math.random() * 3);
-//            user.getRoles().add(initRoles.get(random));
-//            initUsers.add(user);
-//        }
         roleRepository.saveAll(initRoles);
 
-        List<CreateUserRequestDto> initUsers = Lists.newArrayList();
+        List<UserDto> initUsers = Lists.newArrayList();
         //產生隨機使用者，第0個為固定的資料
         for (int i = 0; i < 10; i++) {
 
-            CreateUserRequestDto user = new CreateUserRequestDto();
+            UserDto user = new UserDto();
             user.setUserName(i == 0 ? "RayLuo" : fakerCN.name().fullName());
             user.setAccount(i == 0 ? "ray1938" : fakerEN.name().firstName() + fakerEN.number().digits(5));
             user.setPassword("123456");
@@ -171,15 +148,15 @@ public class DataInitializer {
             user.setGender("男");
             user.setPhone(fakerCN.phoneNumber().phoneNumber());
             user.setCity(fakerCN.country().capital());
-            user.setRoleIds(new ArrayList<>());
+            user.setRoles(new ArrayList<>());
             int random = (int) (Math.random() * 3);
-            user.getRoleIds().add(
+            user.getRoles().add(
                     i == 0 ? initRoles.get(2).getId().toString() : initRoles.get(random).getId().toString()
             );
             initUsers.add(user);
         }
 
-        for (CreateUserRequestDto initUser : initUsers) {
+        for (UserDto initUser : initUsers) {
             userService.save(initUser);
         }
 

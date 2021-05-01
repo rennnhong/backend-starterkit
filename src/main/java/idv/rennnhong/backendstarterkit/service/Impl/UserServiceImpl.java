@@ -3,14 +3,13 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.user.UpdateUserRequestDto;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.UserMapper;
+import idv.rennnhong.backendstarterkit.service.dto.UserEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserDto;
+import idv.rennnhong.backendstarterkit.service.mapper.UserMapper;
 import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
 import idv.rennnhong.backendstarterkit.exception.ExceptionType;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.User;
+import idv.rennnhong.backendstarterkit.entity.Role;
+import idv.rennnhong.backendstarterkit.entity.User;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.repository.UserRepository;
@@ -81,14 +80,14 @@ class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto save(CreateUserRequestDto dto) {
-        if (userRepository.existsByAccount(dto.getAccount()))
-            throw ExceptionFactory.newException(USER, ExceptionType.DUPLICATE_ENTITY, dto.getAccount());
+    public UserDto save(UserDto userDto) {
+        if (userRepository.existsByAccount(userDto.getAccount()))
+            throw ExceptionFactory.newException(USER, ExceptionType.DUPLICATE_ENTITY, userDto.getAccount());
 
-        User user = userMapper.createEntity(dto);
+        User user = userMapper.createEntity(userDto);
 
         //處理Roles
-        if (!ObjectUtils.isEmpty(dto.getRoleIds())) setUserRoles(user, dto.getRoleIds());
+        if (!ObjectUtils.isEmpty(userDto.getRoles())) setUserRoles(user, userDto.getRoles());
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -98,7 +97,7 @@ class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto update(UUID id, UpdateUserRequestDto dto) {
+    public UserDto update(UUID id, UserEditDto dto) {
         Optional<User> optionalUser = userRepository.findById(id);
         User user = optionalUser.orElseThrow(() ->
                 ExceptionFactory.newException(USER, ExceptionType.ENTITY_NOT_FOUND, id.toString())

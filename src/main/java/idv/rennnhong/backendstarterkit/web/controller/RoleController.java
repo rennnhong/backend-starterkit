@@ -1,10 +1,9 @@
 package idv.rennnhong.backendstarterkit.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.rennnhong.backendstarterkit.web.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.role.UpdateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.backendstarterkit.service.RoleService;
 import idv.rennnhong.backendstarterkit.service.UserService;
@@ -71,8 +70,8 @@ public class RoleController {
 
     @PostMapping
     @ApiOperation("新增角色資料")
-    public ResponseEntity createRole(@RequestBody CreateRoleRequestDto createRoleRequestDto) {
-        RoleDto savedRole = roleService.save(createRoleRequestDto);
+    public ResponseEntity createRole(@RequestBody RoleDto roleDto) {
+        RoleDto savedRole = roleService.save(roleDto);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(savedRole);
         return new ResponseEntity(responseBody, HttpStatus.CREATED);
     }
@@ -81,8 +80,8 @@ public class RoleController {
     @PutMapping("/{id}")
     @ApiOperation("修改角色資料")
     public ResponseEntity updateRole(@PathVariable("id") UUID id,
-                                     @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
-        RoleDto updatedRole = roleService.update(id, updateRoleRequestDto);
+                                     @RequestBody RoleEditDto roleEditDto) {
+        RoleDto updatedRole = roleService.update(id, roleEditDto);
         ResponseBody<RoleDto> responseBody = ResponseBody.newSingleBody(updatedRole);
         return ResponseEntity.ok(responseBody);
     }

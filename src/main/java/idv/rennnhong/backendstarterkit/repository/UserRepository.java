@@ -1,7 +1,7 @@
 package idv.rennnhong.backendstarterkit.repository;
 
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.User;
+import idv.rennnhong.backendstarterkit.entity.Role;
+import idv.rennnhong.backendstarterkit.entity.User;
 import idv.rennnhong.common.SoftDeleteRepository;
 
 import java.util.Collection;

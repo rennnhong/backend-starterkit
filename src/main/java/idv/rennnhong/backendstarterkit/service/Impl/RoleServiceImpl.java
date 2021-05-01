@@ -3,16 +3,15 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import idv.rennnhong.backendstarterkit.web.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.role.UpdateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.RoleMapper;
+import idv.rennnhong.backendstarterkit.service.dto.RoleEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.mapper.RoleMapper;
 import idv.rennnhong.backendstarterkit.exception.ExceptionFactory;
 import idv.rennnhong.backendstarterkit.exception.ExceptionType;
-import idv.rennnhong.backendstarterkit.model.entity.Permission;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
-import idv.rennnhong.backendstarterkit.model.entity.User;
+import idv.rennnhong.backendstarterkit.entity.Permission;
+import idv.rennnhong.backendstarterkit.entity.Role;
+import idv.rennnhong.backendstarterkit.entity.RolePermission;
+import idv.rennnhong.backendstarterkit.entity.User;
 import idv.rennnhong.backendstarterkit.repository.ActionRepository;
 import idv.rennnhong.backendstarterkit.repository.PermissionRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
@@ -84,20 +83,20 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDto save(CreateRoleRequestDto createRoleRequestDto) {
-        Role role = roleMapper.createEntity(createRoleRequestDto);
+    public RoleDto save(RoleDto roleDto) {
+        Role role = roleMapper.createEntity(roleDto);
         Role savedRole = roleRepository.save(role);
         return roleMapper.toDto(savedRole);
     }
 
     @Override
-    public RoleDto update(UUID id, UpdateRoleRequestDto updateRoleRequestDto) {
+    public RoleDto update(UUID id, RoleEditDto roleEditDto) {
         Optional<Role> optionalRole = roleRepository.findById(id);
         Role role = optionalRole.orElseThrow(() ->
                 ExceptionFactory.newException(ROLE, ExceptionType.ENTITY_NOT_FOUND, id.toString())
         );
 
-        roleMapper.updateEntity(role, updateRoleRequestDto);
+        roleMapper.updateEntity(role, roleEditDto);
 
         Role updatedRole = roleRepository.save(role);
         return roleMapper.toDto(updatedRole);

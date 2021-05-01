@@ -1,8 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.role.UpdateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
 import idv.rennnhong.common.query.PageableResult;
 
 import java.util.Collection;
@@ -16,9 +15,9 @@ public interface RoleService {
 
     RoleDto getById(UUID id);
 
-    RoleDto save(CreateRoleRequestDto createRoleRequestDto);
+    RoleDto save(RoleDto roleDto);
 
-    RoleDto update(UUID id, UpdateRoleRequestDto updateRoleRequestDto);
+    RoleDto update(UUID id, RoleEditDto roleEditDto);
 
     void delete(UUID id);
 

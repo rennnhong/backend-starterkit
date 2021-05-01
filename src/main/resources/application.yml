@@ -1,5 +1,5 @@
 server:
-  port: 8089
+  port: 8080
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -7,10 +7,10 @@ spring:
   application:
     name: "Rennnhong-Backend-StarterKit"
   datasource:
-    #    url: jdbc:h2:mem:testdb
-    url: jdbc:sqlserver://127.0.0.1;databaseName=backend
-    #    driver-class-name: org.h2.Driver
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:h2:mem:testdb
+#    url: jdbc:sqlserver://127.0.0.1;databaseName=backend
+    driver-class-name: org.h2.Driver
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     username: rayluo
     password: 1938
   #    sql-script-encoding: utf-8
@@ -20,8 +20,8 @@ spring:
       path: /h2-console
   jpa:
     show-sql: true
-    database: sql_server
-    #    database: H2
+#    database: sql_server
+    database: H2
     properties:
       hibernate:
     hibernate:

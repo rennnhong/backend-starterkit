@@ -1,9 +1,8 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
-import idv.rennnhong.backendstarterkit.dto.ActionDto;
-import idv.rennnhong.backendstarterkit.model.entity.Permission;
+import idv.rennnhong.backendstarterkit.service.dto.ActionEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.ActionDto;
+import idv.rennnhong.backendstarterkit.entity.Permission;
 import idv.rennnhong.common.query.PageableResult;
 
 import java.util.Collection;
@@ -16,9 +15,9 @@ public interface ActionService {
 
     ActionDto getById(UUID id);
 
-    ActionDto save(UUID permissionId, CreateActionRequestDto createActionRequestDto);
+    ActionDto save(UUID permissionId, ActionDto actionDto);
 
-    ActionDto update(UUID id, UUID permissionId, UpdateActionRequestDto updateActionRequestDto);
+    ActionDto update(UUID id, UUID permissionId, ActionEditDto actionEditDto);
 
     void delete(UUID id);
 

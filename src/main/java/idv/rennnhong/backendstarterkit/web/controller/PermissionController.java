@@ -1,11 +1,9 @@
 package idv.rennnhong.backendstarterkit.web.controller;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.dto.ActionDto;
-import idv.rennnhong.backendstarterkit.dto.PermissionDto;
+import idv.rennnhong.backendstarterkit.service.dto.ActionEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.ActionDto;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.service.ActionService;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
 import idv.rennnhong.common.query.PageableResult;
@@ -62,8 +60,8 @@ public class PermissionController {
 
     @PostMapping
     @ApiOperation("新增頁面資料")
-    public ResponseEntity<?> createPermission(@RequestBody CreatePermissionRequestDto createPermissionRequestDto) {
-        PermissionDto permission = permissionService.save(createPermissionRequestDto);
+    public ResponseEntity<?> createPermission(@RequestBody PermissionDto permissionDto) {
+        PermissionDto permission = permissionService.save(permissionDto);
         ResponseBody<PermissionDto> responseBody = ResponseBody.newSingleBody(permission);
         return new ResponseEntity(responseBody, HttpStatus.CREATED);
     }
@@ -72,8 +70,8 @@ public class PermissionController {
     @PutMapping("/{id}")
     @ApiOperation("修改頁面資料")
     public ResponseEntity updatePermission(@PathVariable UUID id,
-                                           @RequestBody UpdatePermissionRequestDto updatePermissionRequestDto) {
-        PermissionDto updatedPermission = permissionService.update(id, updatePermissionRequestDto);
+                                           @RequestBody PermissionEditDto permissionEditDto) {
+        PermissionDto updatedPermission = permissionService.update(id, permissionEditDto);
 //        if (ObjectUtils.isEmpty(updatedPermission)) {
 //            return new ResponseEntity(ErrorMessages.RESOURCE_NOT_FOUND.toObject(), HttpStatus.NOT_FOUND);
 //        }
@@ -92,8 +90,8 @@ public class PermissionController {
     @PostMapping("/{pageId}/actions")
     @ApiOperation("新增頁面功能資料")
     public ResponseEntity createAction(@PathVariable UUID pageId,
-                                       @RequestBody CreateActionRequestDto createActionRequestDto) {
-        ActionDto savedAction = actionService.save(pageId,createActionRequestDto);
+                                       @RequestBody ActionDto actionDto) {
+        ActionDto savedAction = actionService.save(pageId,actionDto);
         ResponseBody<ActionDto> responseBody = ResponseBody.newSingleBody(savedAction);
         return new ResponseEntity(responseBody, HttpStatus.CREATED);
     }
@@ -103,8 +101,8 @@ public class PermissionController {
     @ApiOperation("修改頁面功能資料")
     public ResponseEntity updateAction(@PathVariable UUID permissionId,
                                        @PathVariable UUID actionId,
-                                       @RequestBody UpdateActionRequestDto updateActionRequestDto) {
-        ActionDto updatedAction = actionService.update(actionId, permissionId, updateActionRequestDto);
+                                       @RequestBody ActionEditDto actionEditDto) {
+        ActionDto updatedAction = actionService.update(actionId, permissionId, actionEditDto);
         ResponseBody<ActionDto> responseBody = ResponseBody.newSingleBody(updatedAction);
         return ResponseEntity.ok(responseBody);
     }

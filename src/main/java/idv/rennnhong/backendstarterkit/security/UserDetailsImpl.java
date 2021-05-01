@@ -1,8 +1,7 @@
 package idv.rennnhong.backendstarterkit.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
-import idv.rennnhong.backendstarterkit.model.entity.User;
+import idv.rennnhong.backendstarterkit.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

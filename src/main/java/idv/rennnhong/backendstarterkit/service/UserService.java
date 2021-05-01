@@ -1,8 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.user.UpdateUserRequestDto;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserDto;
 import idv.rennnhong.common.query.PageableResult;
 
 import java.util.Collection;
@@ -22,9 +21,9 @@ public interface UserService {
 
     UserDto getById(UUID id);
 
-    UserDto save(CreateUserRequestDto t);
+    UserDto save(UserDto userDto);
 
-    UserDto update(UUID id, UpdateUserRequestDto t);
+    UserDto update(UUID id, UserEditDto userEditDto);
 
     void delete(UUID id);
 

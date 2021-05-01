@@ -1,8 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.api.CreateApiRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.api.UpdateApiRequestDto;
-import idv.rennnhong.backendstarterkit.dto.ApiDto;
+import idv.rennnhong.backendstarterkit.service.dto.ApiEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.ApiDto;
 import org.springframework.http.HttpMethod;
 
 import java.util.Collection;
@@ -22,9 +21,9 @@ public interface ApiService {
 
     ApiDto getRestFulApi(String url, HttpMethod httpMethod);
 
-    ApiDto save(CreateApiRequestDto createApiRequestDto);
+    ApiDto save(ApiDto apiDto);
 
-    ApiDto update(UUID id, UpdateApiRequestDto updateApiRequestDto);
+    ApiDto update(UUID id, ApiEditDto apiEditDto);
 
     void delete(UUID id);
 

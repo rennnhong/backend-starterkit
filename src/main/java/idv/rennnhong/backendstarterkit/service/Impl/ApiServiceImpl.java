@@ -1,13 +1,12 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.Sets;
-import idv.rennnhong.backendstarterkit.web.controller.request.api.CreateApiRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.api.UpdateApiRequestDto;
-import idv.rennnhong.backendstarterkit.dto.ApiDto;
-import idv.rennnhong.backendstarterkit.dto.mapper.ApiMapper;
-import idv.rennnhong.backendstarterkit.model.entity.Api;
-import idv.rennnhong.backendstarterkit.model.entity.Role;
-import idv.rennnhong.backendstarterkit.model.entity.RolePermission;
+import idv.rennnhong.backendstarterkit.service.dto.ApiEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.ApiDto;
+import idv.rennnhong.backendstarterkit.service.mapper.ApiMapper;
+import idv.rennnhong.backendstarterkit.entity.Api;
+import idv.rennnhong.backendstarterkit.entity.Role;
+import idv.rennnhong.backendstarterkit.entity.RolePermission;
 import idv.rennnhong.backendstarterkit.repository.ApiRepository;
 import idv.rennnhong.backendstarterkit.repository.RoleRepository;
 import idv.rennnhong.backendstarterkit.service.ApiService;
@@ -75,16 +74,16 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ApiDto save(CreateApiRequestDto createApiRequestDto) {
-        Api entity = apiMapper.createEntity(createApiRequestDto);
+    public ApiDto save(ApiDto apiDto) {
+        Api entity = apiMapper.createEntity(apiDto);
         apiRepository.save(entity);
         return apiMapper.toDto(entity);
     }
 
     @Override
-    public ApiDto update(UUID id, UpdateApiRequestDto updateApiRequestDto) {
+    public ApiDto update(UUID id, ApiEditDto apiEditDto) {
         Api api = apiRepository.findById(id).get();
-        apiMapper.updateEntity(api, updateApiRequestDto);
+        apiMapper.updateEntity(api, apiEditDto);
         return apiMapper.toDto(api);
     }
 

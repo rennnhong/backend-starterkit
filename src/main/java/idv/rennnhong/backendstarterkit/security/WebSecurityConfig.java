@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/actuator/**",
             "/configuration/ui",
             "/configuration/security",
-            "/v2/api-docs"
+            "/v2/api-docs",
+            "/h2-console/**"
     };
 
     private static final String API_PREFIX = "/api";

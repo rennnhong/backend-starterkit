@@ -1,9 +1,8 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.dto.PermissionDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.PermissionDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
 import idv.rennnhong.common.query.PageableResult;
 
 import java.util.Collection;
@@ -16,9 +15,9 @@ public interface PermissionService {
 
     PermissionDto getById(UUID id);
 
-    PermissionDto save(CreatePermissionRequestDto createPermissionRequestDto);
+    PermissionDto save(PermissionDto permissionDto);
 
-    PermissionDto update(UUID id, UpdatePermissionRequestDto updatePermissionRequestDto);
+    PermissionDto update(UUID id, PermissionEditDto permissionEditDto);
 
     void delete(UUID id);
 

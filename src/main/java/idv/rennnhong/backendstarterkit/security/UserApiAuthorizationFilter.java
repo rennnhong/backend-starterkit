@@ -1,8 +1,8 @@
 package idv.rennnhong.backendstarterkit.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.rennnhong.backendstarterkit.dto.ApiDto;
-import idv.rennnhong.backendstarterkit.dto.RoleDto;
+import idv.rennnhong.backendstarterkit.service.dto.ApiDto;
+import idv.rennnhong.backendstarterkit.service.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.service.ApiService;
 import idv.rennnhong.backendstarterkit.service.RoleService;
 import idv.rennnhong.backendstarterkit.service.UserService;

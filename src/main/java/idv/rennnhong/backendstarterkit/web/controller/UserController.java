@@ -1,10 +1,9 @@
 package idv.rennnhong.backendstarterkit.web.controller;
 
-import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.web.controller.request.user.UpdateUserRequestDto;
-import idv.rennnhong.backendstarterkit.dto.UserDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserEditDto;
+import idv.rennnhong.backendstarterkit.service.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.UserService;
-import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;
+import idv.rennnhong.common.utils.BindingResultHelper;
 import idv.rennnhong.common.query.PageableResult;
 import idv.rennnhong.common.response.ResponseBody;
 import io.swagger.annotations.Api;
@@ -70,18 +69,17 @@ public class UserController {
     @PostMapping
     @ApiOperation("建立使用者資料")
     public ResponseEntity createUser(
-            @Valid @RequestBody CreateUserRequestDto createUserRequestDto,
+            @Valid @RequestBody UserDto userDto,
             BindingResult bindingResult) {
 
-        BindingResultWrapper bindingResultWrapper = new BindingResultWrapper(bindingResult);
-        if (bindingResultWrapper.hasErrors()) {
-            Object errorMap = bindingResultWrapper.asHashMap();
+        if (bindingResult.hasErrors()) {
+            Object errorMap = BindingResultHelper.toHashMap(bindingResult);
             return new ResponseEntity(
                     ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST, errorMap),
                     HttpStatus.BAD_REQUEST);
         }
 
-        UserDto savedUserDto = userService.save(createUserRequestDto);
+        UserDto savedUserDto = userService.save(userDto);
         return new ResponseEntity(ResponseBody.newSingleBody(savedUserDto), HttpStatus.OK);
 
     }
@@ -90,17 +88,16 @@ public class UserController {
     @ApiOperation("更新使用者資料")
     public ResponseEntity updateUser(
             @PathVariable("id") UUID id,
-            @Valid @RequestBody UpdateUserRequestDto updateUserRequestDto,
+            @Valid @RequestBody UserEditDto userEditDto,
             BindingResult bindingResult) {
-        BindingResultWrapper bindingResultWrapper = new BindingResultWrapper(bindingResult);
-        if (bindingResultWrapper.hasErrors()) {
-            Object errorMap = bindingResultWrapper.asHashMap();
+        if (bindingResult.hasErrors()) {
+            Object errorMap = BindingResultHelper.toHashMap(bindingResult);
             return new ResponseEntity(
                     ResponseBody.newErrorMessageBody(INVALID_FIELDS_REQUEST, errorMap),
                     HttpStatus.BAD_REQUEST);
         }
 
-        UserDto updatedUserDto = userService.update(id, updateUserRequestDto);
+        UserDto updatedUserDto = userService.update(id, userEditDto);
         return new ResponseEntity(updatedUserDto, HttpStatus.OK);
     }
 
