@@ -1,7 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import idv.rennnhong.common.query.PageableResult;

@@ -1,7 +1,7 @@
 package idv.rennnhong.backendstarterkit.dto.mapper;
 
-import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.role.CreateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.model.entity.Role;
 import org.mapstruct.Mapper;

@@ -1,9 +1,9 @@
-package idv.rennnhong.backendstarterkit.controller;
+package idv.rennnhong.backendstarterkit.web.controller;
 
-import idv.rennnhong.backendstarterkit.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.permission.UpdatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.service.ActionService;

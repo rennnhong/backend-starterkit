@@ -1,6 +1,6 @@
-package idv.rennnhong.backendstarterkit.web.config;
+package idv.rennnhong.backendstarterkit.persistence;
 
-import idv.rennnhong.common.persistence.audit.AuditorAwareImpl;
+import idv.rennnhong.backendstarterkit.persistence.audit.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

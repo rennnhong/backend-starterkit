@@ -1,4 +1,4 @@
-package idv.rennnhong.backendstarterkit.controller.request.role;
+package idv.rennnhong.backendstarterkit.web.controller.request.role;
 
 import lombok.Getter;
 import lombok.Setter;

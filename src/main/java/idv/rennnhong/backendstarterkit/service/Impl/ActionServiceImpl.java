@@ -1,8 +1,8 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableSet;
-import idv.rennnhong.backendstarterkit.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ActionMapper;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;

@@ -1,9 +1,8 @@
-package idv.rennnhong.backendstarterkit.controller;
+package idv.rennnhong.backendstarterkit.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.rennnhong.backendstarterkit.controller.request.role.CreateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.role.UpdateRoleRequestDto;
-import idv.rennnhong.backendstarterkit.dto.PermissionDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.role.CreateRoleRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.role.UpdateRoleRequestDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.PermissionService;
@@ -18,16 +17,10 @@ import io.swagger.annotations.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
-
-import static idv.rennnhong.common.response.ErrorMessages.RESOURCE_NOT_FOUND;
 
 
 @RestController

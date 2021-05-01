@@ -3,7 +3,7 @@ package idv.rennnhong.backendstarterkit;
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
 import idv.rennnhong.backendstarterkit.model.entity.*;
 import idv.rennnhong.backendstarterkit.repository.*;
 import idv.rennnhong.backendstarterkit.service.PermissionService;

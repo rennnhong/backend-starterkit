@@ -1,4 +1,4 @@
-package idv.rennnhong.backendstarterkit.controller.request.user;
+package idv.rennnhong.backendstarterkit.web.controller.request.user;
 
 import lombok.Data;
 

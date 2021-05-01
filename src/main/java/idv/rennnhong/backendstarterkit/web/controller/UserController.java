@@ -1,7 +1,7 @@
-package idv.rennnhong.backendstarterkit.controller;
+package idv.rennnhong.backendstarterkit.web.controller;
 
-import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.service.UserService;
 import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;

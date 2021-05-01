@@ -2,8 +2,8 @@ package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import idv.rennnhong.backendstarterkit.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.permission.UpdatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.PermissionMapper;

@@ -1,8 +1,8 @@
-package idv.rennnhong.backendstarterkit.controller;
+package idv.rennnhong.backendstarterkit.web.controller;
 
 
 import com.google.common.collect.Maps;
-import idv.rennnhong.backendstarterkit.controller.request.login.LoginRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.login.LoginRequestDto;
 import idv.rennnhong.backendstarterkit.security.WebSecurityConfig;
 import idv.rennnhong.backendstarterkit.security.jwt.JwtUtils;
 import idv.rennnhong.backendstarterkit.web.validation.BindingResultWrapper;

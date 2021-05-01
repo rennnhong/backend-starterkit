@@ -1,8 +1,8 @@
 package idv.rennnhong.backendstarterkit.dto.mapper;
 
 import com.google.common.collect.ImmutableList;
-import idv.rennnhong.backendstarterkit.controller.request.user.CreateUserRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.user.UpdateUserRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.user.CreateUserRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.user.UpdateUserRequestDto;
 import idv.rennnhong.backendstarterkit.dto.UserDto;
 import idv.rennnhong.backendstarterkit.dto.UserPermissionDto;
 import idv.rennnhong.backendstarterkit.model.entity.Role;

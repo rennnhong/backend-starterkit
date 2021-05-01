@@ -1,8 +1,8 @@
 package idv.rennnhong.backendstarterkit.service.Impl;
 
 import com.google.common.collect.Sets;
-import idv.rennnhong.backendstarterkit.controller.request.api.CreateApiRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.api.UpdateApiRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.api.CreateApiRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.api.UpdateApiRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ApiDto;
 import idv.rennnhong.backendstarterkit.dto.mapper.ApiMapper;
 import idv.rennnhong.backendstarterkit.model.entity.Api;

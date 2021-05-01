@@ -1,7 +1,7 @@
 package idv.rennnhong.backendstarterkit.dto.mapper;
 
-import idv.rennnhong.backendstarterkit.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.permission.UpdatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.model.entity.Permission;
 import org.mapstruct.Mapper;

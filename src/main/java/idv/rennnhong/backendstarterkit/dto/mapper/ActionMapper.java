@@ -1,8 +1,8 @@
 package idv.rennnhong.backendstarterkit.dto.mapper;
 
 
-import idv.rennnhong.backendstarterkit.controller.request.action.CreateActionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.action.UpdateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.CreateActionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.action.UpdateActionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.ActionDto;
 import idv.rennnhong.backendstarterkit.model.entity.Action;
 import org.mapstruct.Mapper;

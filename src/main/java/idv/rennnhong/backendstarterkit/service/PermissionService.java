@@ -1,7 +1,7 @@
 package idv.rennnhong.backendstarterkit.service;
 
-import idv.rennnhong.backendstarterkit.controller.request.permission.CreatePermissionRequestDto;
-import idv.rennnhong.backendstarterkit.controller.request.permission.UpdatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.CreatePermissionRequestDto;
+import idv.rennnhong.backendstarterkit.web.controller.request.permission.UpdatePermissionRequestDto;
 import idv.rennnhong.backendstarterkit.dto.PermissionDto;
 import idv.rennnhong.backendstarterkit.dto.RoleDto;
 import idv.rennnhong.common.query.PageableResult;

@@ -1,4 +1,4 @@
-package idv.rennnhong.common.persistence.audit;
+package idv.rennnhong.backendstarterkit.persistence.audit;
 
 import org.springframework.data.domain.AuditorAware;
 
